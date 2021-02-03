@@ -75,5 +75,4 @@ crashlytics-build.properties
 *.mp3
 Assets/Resources
 Assets/Anims
-Assets/Animators
 Assets/Characters
