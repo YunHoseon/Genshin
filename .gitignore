@@ -73,6 +73,7 @@ crashlytics-build.properties
 *.jpg
 *.png
 *.mp3
+Assets/01_Download Asset
 Assets/Resources
 Assets/Anims
 Assets/Characters

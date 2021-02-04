@@ -14,6 +14,7 @@ public class PlayerCameraController : MonoBehaviour
     private float followSpeed = 3;
 
     Vector3 cameraPosition;
+    private bool isCursorVisible = false;
 
     void LateUpdate()
     {
@@ -22,5 +23,22 @@ public class PlayerCameraController : MonoBehaviour
         cameraPosition.z = target.transform.position.z + offsetZ;
 
         transform.position = Vector3.Lerp(transform.position, cameraPosition, followSpeed * Time.deltaTime);
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isCursorVisible)
+        {
+            Cursor.visible = false;
+            Screen.lockCursor = true;
+        }
+        else
+        {
+            Cursor.visible = true;
+            Screen.lockCursor = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            isCursorVisible = !isCursorVisible;
     }
 }

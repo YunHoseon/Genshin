@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
+
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField]
@@ -12,17 +15,21 @@ public class PlayerMove : MonoBehaviour
     private float rotateSpeed = 5.0f;
 
     private bool isJumping = false;
+
     private float horizontalMove;
     private float verticalMove;
 
     private Rigidbody rigidbody;
-    private Animator animator;
     private Vector3 movement;
+
+    private Player player = null;
+    private PlayerAnimController playerAnimController = null;
 
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
-        animator = GetComponentInChildren<Animator>();
+        playerAnimController = GetComponent<PlayerAnimController>();
+        player = GetComponent<Player>();
     }
 
     void Update()
@@ -31,24 +38,27 @@ public class PlayerMove : MonoBehaviour
         verticalMove = Input.GetAxisRaw("Vertical");
 
         if (Input.GetButtonDown("Jump"))
-        {
             isJumping = true;
-        }
 
-        if (horizontalMove == 0 && verticalMove == 0)
-            animator.SetBool("Walk", false);
+        if (Input.GetMouseButtonDown(0))
+        {
+            player.playerState = PlayerState.Attaking;
+            playerAnimController.isAttacking = true;
+        }
     }
 
     void FixedUpdate()
     {
-        Walk(horizontalMove, verticalMove);
-        Jump();
-        Rotate();
+        if(!playerAnimController.isAttacking)
+        {
+            Walk(horizontalMove, verticalMove);
+            Jump();
+            Rotate();
+        }
     }
 
     void Walk(float h, float v)
     {
-        animator.SetBool("Walk", true);
         movement.Set(h, 0, v);
         movement = movement.normalized * moveSpeed * Time.deltaTime;
 
@@ -60,7 +70,6 @@ public class PlayerMove : MonoBehaviour
         if(isJumping == false)
             return;
 
-        animator.SetTrigger("Jump");
         rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
         isJumping = false;
     }
