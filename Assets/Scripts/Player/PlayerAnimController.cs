@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerAnimController : MonoBehaviour
 {
     private Animator animator;
+    private Player player = null;
 
     private float h;
     private float v;
@@ -15,6 +16,7 @@ public class PlayerAnimController : MonoBehaviour
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        player = GetComponent<Player>();
     }
 
     void Update()
@@ -66,5 +68,6 @@ public class PlayerAnimController : MonoBehaviour
     public void ExitSlash1()
     {
         isAttacking = false;
+        player.playerState = PlayerState.None;
     }
 }
