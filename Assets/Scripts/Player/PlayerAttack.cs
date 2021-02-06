@@ -9,10 +9,19 @@ public class PlayerAttack : MonoBehaviour
 
     void Start()
     {
+
     }
     
     void Update()
     {
 
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if(col.CompareTag("Enemy"))
+        {
+
+        }
     }
 }

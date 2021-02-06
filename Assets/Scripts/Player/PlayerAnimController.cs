@@ -35,6 +35,12 @@ public class PlayerAnimController : MonoBehaviour
 
         if (h == 0 && v == 0)
             animator.SetBool("Walk", false);
+
+        if(player.playerState == PlayerState.InMenu)
+        {
+            animator.SetBool("Walk", false);
+            this.enabled = false;
+        }
     }
 
     void FixedUpdate()
@@ -62,7 +68,7 @@ public class PlayerAnimController : MonoBehaviour
 
     void PlayAttack()
     {
-        animator.SetTrigger("Slash1");
+        animator.SetTrigger("Slash");
     }
 
     public void ExitSlash1()

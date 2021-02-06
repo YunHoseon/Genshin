@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 
     public void GoToStartScene()
     {
+        Time.timeScale = 1.0f;
         GameManager.Instance.SetIsExitGame(true);
     }
 }
