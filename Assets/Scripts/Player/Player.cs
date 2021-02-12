@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum PlayerState
 {
-    None,
+    None = 0,
     Attaking,
     Swimming,
     Die,
@@ -16,9 +16,9 @@ public class Player : MonoBehaviour
     public PlayerState playerState;
     private PlayerAttack playerAttack;
 
-    private float hp;
-    private float atk;
-    private float grd;
+    private float playerHp;
+    private float playerAtk;
+    private float playerGrd;
 
     private bool isInMenu = false;
     public GameObject menu;
