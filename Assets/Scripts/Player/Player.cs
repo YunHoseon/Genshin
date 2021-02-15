@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum PlayerState
 {
@@ -22,6 +23,9 @@ public class Player : MonoBehaviour
 
     private bool isInMenu = false;
     public GameObject menu;
+
+    public GameObject ingredientUI;
+    public Text txtIngredientName;
 
     void Start()
     {
@@ -79,6 +83,29 @@ public class Player : MonoBehaviour
                 playerState = PlayerState.None;
                 menu.SetActive(false);
             }
+        }
+    }
+
+    void OnTriggerStay(Collider col)
+    {
+        if(col.CompareTag("Ingredient"))
+        {
+            txtIngredientName.text = col.name;
+            ingredientUI.SetActive(true);
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                Destroy(col.gameObject);
+                ingredientUI.SetActive(false);
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        if (col.CompareTag("Ingredient"))
+        {
+            ingredientUI.SetActive(false);
         }
     }
 }

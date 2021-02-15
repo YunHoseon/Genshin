@@ -10,7 +10,7 @@ public enum ItemKind
     Nurture
 }
 
-public class Item
+public class Item : MonoBehaviour
 {
     private ItemKind itemKind;
     private int rarity = 0;

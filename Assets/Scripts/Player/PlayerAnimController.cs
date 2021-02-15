@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerAnimController : MonoBehaviour
 {
+    private Rigidbody rigidbody;
     private Animator animator;
     private Player player = null;
 
@@ -15,6 +16,7 @@ public class PlayerAnimController : MonoBehaviour
 
     void Start()
     {
+        rigidbody = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
         player = GetComponent<Player>();
     }
@@ -69,6 +71,7 @@ public class PlayerAnimController : MonoBehaviour
     void PlayAttack()
     {
         animator.SetTrigger("Slash");
+        //rigidbody.MovePosition(transform.position + transform.forward * 0.8f);
     }
 
     public void ExitSlash1()

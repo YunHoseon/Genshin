@@ -9,7 +9,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Start()
     {
-
+        StartCoroutine(test());
     }
     
     void Update()
@@ -23,5 +23,13 @@ public class PlayerAttack : MonoBehaviour
         {
 
         }
+    }
+
+    IEnumerator test()
+    {
+        yield return new WaitForSeconds(2f);
+        Debug.Log("one");
+        yield return new WaitForSeconds(2f);
+        Debug.Log("two");
     }
 }
