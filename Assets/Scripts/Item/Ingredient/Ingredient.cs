@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Ingredient : Item
 {
-    public string name;
+    
 }
