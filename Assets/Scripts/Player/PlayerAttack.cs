@@ -9,12 +9,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(test());
-    }
-    
-    void Update()
-    {
-
+        //StartCoroutine(test());
     }
 
     void OnTriggerEnter(Collider col)

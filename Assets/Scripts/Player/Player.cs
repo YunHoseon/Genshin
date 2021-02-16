@@ -7,6 +7,8 @@ public enum PlayerState
 {
     None = 0,
     Attaking,
+    Skill1,
+    Skill2,
     Swimming,
     Die,
     InMenu
@@ -15,11 +17,15 @@ public enum PlayerState
 public class Player : MonoBehaviour
 {
     public PlayerState playerState;
+    private Element playerElement;
     private PlayerAttack playerAttack;
 
     private float playerHp;
+    private float playerMaxHp;
     private float playerAtk;
     private float playerGrd;
+    private float playerStamina;
+    private float playerMaxStamina;
 
     private bool isInMenu = false;
     public GameObject menu;
@@ -27,7 +33,7 @@ public class Player : MonoBehaviour
     public GameObject ingredientUI;
     public Text txtIngredientName;
 
-    void Start()
+    void Awake()
     {
         playerState = PlayerState.None;
         playerAttack = GetComponent<PlayerAttack>();
@@ -55,6 +61,22 @@ public class Player : MonoBehaviour
             GetComponent<PlayerMove>().enabled = false;
             GetComponent<PlayerAttack>().enabled = true;
             GetComponent<PlayerAnimController>().enabled = true;
+
+            playerAttack.weapon.SetActive(true);
+            playerAttack.backWeapon.SetActive(false);
+        }
+        else if(playerState == PlayerState.Skill1)
+        {
+            GetComponent<PlayerMove>().enabled = false;
+            GetComponent<PlayerAttack>().enabled = false;
+
+            playerAttack.weapon.SetActive(false);
+            playerAttack.backWeapon.SetActive(true);
+        }
+        else if (playerState == PlayerState.Skill2)
+        {
+            GetComponent<PlayerMove>().enabled = false;
+            GetComponent<PlayerAttack>().enabled = false;
 
             playerAttack.weapon.SetActive(true);
             playerAttack.backWeapon.SetActive(false);

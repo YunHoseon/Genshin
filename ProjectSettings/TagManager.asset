@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - Enemy
   - Ingredient
+  - Weapon
+  - Skill
   layers:
   - Default
   - TransparentFX

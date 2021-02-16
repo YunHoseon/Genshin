@@ -43,6 +43,20 @@ public class PlayerAnimController : MonoBehaviour
             animator.SetBool("Walk", false);
             this.enabled = false;
         }
+
+        if(Input.GetKey(KeyCode.E) && player.playerState == PlayerState.Skill1)
+        {
+            animator.SetBool("StormSward", true);
+        }
+        else
+        {
+            animator.SetBool("StormSward", false);
+        }
+
+        if(Input.GetKey(KeyCode.Q) && player.playerState == PlayerState.Skill2)
+        {
+            animator.SetTrigger("Tornado");
+        }
     }
 
     void FixedUpdate()
