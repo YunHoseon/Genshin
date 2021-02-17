@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public enum PlayerState
 {
     None = 0,
-    Attaking,
-    Skill1,
-    Skill2,
+    Normal_Attack,
+    Elemental_Skill,
+    Elemental_Burst,
+    Climbing,
     Swimming,
     Die,
     InMenu
@@ -19,17 +20,17 @@ public class Player : MonoBehaviour
     public PlayerState playerState;
     private Element playerElement;
     private PlayerAttack playerAttack;
+    public PlayerSkill playerSkill;
 
     private float playerHp;
     private float playerMaxHp;
     private float playerAtk;
     private float playerGrd;
     private float playerStamina;
-    private float playerMaxStamina;
+    private float playerMaxStamina = 10.0f;
 
     private bool isInMenu = false;
     public GameObject menu;
-
     public GameObject ingredientUI;
     public Text txtIngredientName;
 
@@ -37,12 +38,18 @@ public class Player : MonoBehaviour
     {
         playerState = PlayerState.None;
         playerAttack = GetComponent<PlayerAttack>();
+        playerSkill = GetComponent<PlayerSkill>();
     }
 
     void Update()
     {
         OnOffPlayerScript();
         GoToMenu();
+    }
+
+    void PlayerRayCast()
+    {
+
     }
 
     void OnOffPlayerScript()
@@ -56,7 +63,7 @@ public class Player : MonoBehaviour
             playerAttack.weapon.SetActive(false);
             playerAttack.backWeapon.SetActive(true);
         }
-        else if (playerState == PlayerState.Attaking)
+        else if (playerState == PlayerState.Normal_Attack)
         {
             GetComponent<PlayerMove>().enabled = false;
             GetComponent<PlayerAttack>().enabled = true;
@@ -65,7 +72,7 @@ public class Player : MonoBehaviour
             playerAttack.weapon.SetActive(true);
             playerAttack.backWeapon.SetActive(false);
         }
-        else if(playerState == PlayerState.Skill1)
+        else if(playerState == PlayerState.Elemental_Skill)
         {
             GetComponent<PlayerMove>().enabled = false;
             GetComponent<PlayerAttack>().enabled = false;
@@ -73,7 +80,7 @@ public class Player : MonoBehaviour
             playerAttack.weapon.SetActive(false);
             playerAttack.backWeapon.SetActive(true);
         }
-        else if (playerState == PlayerState.Skill2)
+        else if (playerState == PlayerState.Elemental_Burst)
         {
             GetComponent<PlayerMove>().enabled = false;
             GetComponent<PlayerAttack>().enabled = false;

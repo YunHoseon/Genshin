@@ -29,7 +29,7 @@ public class PlayerAnimController : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
             isJumping = true;
 
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             isAttacking = true;
             PlayAttack();
@@ -38,25 +38,30 @@ public class PlayerAnimController : MonoBehaviour
         if (h == 0 && v == 0)
             animator.SetBool("Walk", false);
 
+        if (h == 0 && v == 0 && player.playerState == PlayerState.Climbing)
+            animator.speed = 0;
+        else
+            animator.speed = 1;
+ 
         if(player.playerState == PlayerState.InMenu)
         {
             animator.SetBool("Walk", false);
             this.enabled = false;
         }
 
-        if(Input.GetKey(KeyCode.E) && player.playerState == PlayerState.Skill1)
-        {
-            animator.SetBool("StormSward", true);
-        }
+        if(player.playerState == PlayerState.Climbing)
+            animator.SetBool("Climbing", true);
         else
-        {
-            animator.SetBool("StormSward", false);
-        }
+            animator.SetBool("Climbing", false);
 
-        if(Input.GetKey(KeyCode.Q) && player.playerState == PlayerState.Skill2)
-        {
-            animator.SetTrigger("Tornado");
-        }
+        /*skill*/
+        if(Input.GetKey(KeyCode.E) && player.playerState == PlayerState.Elemental_Skill)
+            animator.SetBool("PalmVortex", true);
+        else
+            animator.SetBool("PalmVortex", false);
+
+        if(Input.GetKey(KeyCode.Q) && player.playerState == PlayerState.Elemental_Burst)
+            animator.SetBool("GustSurge", true);
     }
 
     void FixedUpdate()
@@ -91,6 +96,12 @@ public class PlayerAnimController : MonoBehaviour
     public void ExitSlash1()
     {
         isAttacking = false;
+        player.playerState = PlayerState.None;
+    }
+
+    public void ExitGustSurge()
+    {
+        animator.SetBool("GustSurge", false);
         player.playerState = PlayerState.None;
     }
 }

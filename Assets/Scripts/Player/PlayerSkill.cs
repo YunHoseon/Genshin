@@ -6,87 +6,92 @@ public class PlayerSkill : MonoBehaviour
 {
     private Player player = null;
 
-    private GameObject swordStorm;
-    private GameObject tornado;
-    private bool isActiveSwordStorm = true;
-    private bool isActiveTornado = true;
+    private GameObject palmVortex;
+    private GameObject gustSurge;
+    private bool isActivePalmVortex = true;
+    private bool isActiveGustSurge = true;
 
     private Vector3 scaleChange;
-    private float scalaeChangeSpeed = 7.0f;
+    private float scaleChangeSpeed = 7.0f;
     static GameObject obj = null;
     static GameObject obj2 = null;
 
-    private float swordStormCoolTime = 5.0f;
-    private float tornadoCoolTime = 15.0f;
+    private float palmVortexCooltime = 5.0f;
+    private float gustSurgeCooltime = 15.0f;
+
+    public float GetPalmVortexCooltime() { return palmVortexCooltime; }
+    public float GetGustSurgeCooltime() { return gustSurgeCooltime; }
 
     void Start()
     {
         player = GetComponent<Player>();
-        swordStorm = GameObject.Find("StormSward");
-        tornado = GameObject.Find("Tornado");
+        palmVortex = GameObject.Find("PalmVortex");
+        gustSurge = GameObject.Find("GustSurge");
         scaleChange = new Vector3(0.1f, 0.1f, 0.1f);
     }
 
     void Update()
     {
-        if(isActiveSwordStorm)
+        if(isActivePalmVortex)
         {
-            SwardStorm();
+            PalmVortex();
         }
         else
         {
-            swordStormCoolTime -= Time.deltaTime;
-            if(swordStormCoolTime <= 0.0f)
+            palmVortexCooltime -= Time.deltaTime;
+            if(palmVortexCooltime <= 0.0f)
             {
-                isActiveSwordStorm = true;
-                swordStormCoolTime = 5.0f;
+                isActivePalmVortex = true;
+                palmVortexCooltime = 5.0f;
             }
         }
 
-        if (isActiveTornado)
+        if (isActiveGustSurge)
         {
-            TornadoSkill();
+            GustSurge();
         }
         else
         {
-            tornadoCoolTime -= Time.deltaTime;
-            if (tornadoCoolTime <= 0.0f)
+            gustSurgeCooltime -= Time.deltaTime;
+            if (gustSurgeCooltime <= 0.0f)
             {
-                isActiveTornado = true;
-                tornadoCoolTime = 15.0f;
+                isActiveGustSurge = true;
+                gustSurgeCooltime = 15.0f;
             }
         }
+        UIManager.Instance.elementalSkillCooltime_ = palmVortexCooltime;
+        UIManager.Instance.elementalBurstCooltime_ = gustSurgeCooltime;
     }
 
-    void SwardStorm()
+    void PalmVortex()
     {
         if (Input.GetKeyDown(KeyCode.E) && obj == null)
         {
-            obj = Instantiate(swordStorm, transform.position + transform.forward * 1.3f + transform.up * 0.9f, transform.rotation);
+            obj = Instantiate(palmVortex, transform.position + transform.forward * 1.3f + transform.up * 0.9f, transform.rotation);
         }
         if (Input.GetKey(KeyCode.E))
         {
-            player.playerState = PlayerState.Skill1;
+            player.playerState = PlayerState.Elemental_Skill;
             if (obj.gameObject.transform.localScale.x <= 2.5f)
-                obj.gameObject.transform.localScale += scaleChange * scalaeChangeSpeed * Time.deltaTime;
+                obj.gameObject.transform.localScale += scaleChange * scaleChangeSpeed * Time.deltaTime;
 
-            Invoke("InitSwardStorm", 3f);
+            Invoke("InitPalmVortex", 3f);
         }
         else
-            InitSwardStorm();
+            InitPalmVortex();
     }
 
-    void TornadoSkill()
+    void GustSurge()
     {
         if(Input.GetKeyDown(KeyCode.Q))
         {
-            player.playerState = PlayerState.Skill2;
-            obj2 = Instantiate(tornado, transform.position + transform.forward * 1.3f + transform.up * 0.9f, transform.rotation);
-            Invoke("InitTornado", 6f);
+            player.playerState = PlayerState.Elemental_Burst;
+            obj2 = Instantiate(gustSurge, transform.position + transform.forward * 1.3f + transform.up * 0.9f, transform.rotation);
+            Invoke("InitGustSurge", 6f);
         }
     }
 
-    void InitSwardStorm()
+    void InitPalmVortex()
     {
         if (obj != null)
         {
@@ -94,11 +99,11 @@ public class PlayerSkill : MonoBehaviour
             Destroy(obj.gameObject);
             obj = null;
             player.playerState = PlayerState.None;
-            isActiveSwordStorm = false;
+            isActivePalmVortex = false;
         }
     }
 
-    void InitTornado()
+    void InitGustSurge()
     {
         if (obj2 != null)
         {
@@ -106,7 +111,7 @@ public class PlayerSkill : MonoBehaviour
             Destroy(obj2.gameObject);
             obj2 = null;
             player.playerState = PlayerState.None;
-            isActiveTornado = false;
+            isActiveGustSurge = false;
         }
     }
 }

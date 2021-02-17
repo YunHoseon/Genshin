@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tornado : MonoBehaviour
+public class GustSurge : MonoBehaviour
 {
     private float moveSpeed = 2.0f;
 

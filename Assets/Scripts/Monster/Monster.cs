@@ -16,6 +16,7 @@ public class Monster : MonoBehaviour
     public MonsterState monsterState;
     private Element monsterElement;
 
+    private float monsterMaxHp;
     private float monsterHp;
     private float monsterAtk;
     private float monsterGrd;
@@ -25,6 +26,14 @@ public class Monster : MonoBehaviour
     void Awake()
     {
         monsterState = MonsterState.None;
+    }
+
+    void Update()
+    {
+        if(monsterHp <= 0)
+        {
+            Destroy(this.gameObject, 0.1f);
+        }
     }
 
     void OntriggerEnter(Collider col)

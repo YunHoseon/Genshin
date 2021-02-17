@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private static GameManager sInstance = null;
-    public string nextSceneName;
 
     public static GameManager Instance
     {

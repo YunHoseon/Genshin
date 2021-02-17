@@ -9,6 +9,7 @@ TagManager:
   - Ingredient
   - Weapon
   - Skill
+  - Wall
   layers:
   - Default
   - TransparentFX
