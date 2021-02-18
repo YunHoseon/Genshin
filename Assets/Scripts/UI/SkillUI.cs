@@ -8,6 +8,7 @@ public class SkillUI : MonoBehaviour
     public Text txtCooltime;
     public Image imgGauge;
     public Image imgIcon;
+    public Image imgEnergyGauge;
     private Color imgIconColor;
 
     void Awake()
@@ -25,27 +26,70 @@ public class SkillUI : MonoBehaviour
     
     void Update()
     {
-        if(UIManager.Instance.elementalSkillCooltime_ <= 5.0f && imgIcon.name == "PalmVortex")
+        UpdateUI();
+    }
+
+    void UpdateUI()
+    {
+        if (UIManager.Instance.IsElementalSkillCooltime && imgIcon.name == "PalmVortex")
+        {
+            txtCooltime.gameObject.SetActive(false);
+            imgIconColor.a = 1.0f;
+            imgIcon.color = imgIconColor;
+        }
+        else if (imgIcon.name == "PalmVortex")
         {
             imgGauge.fillAmount = 1;
-            //imgIconColor.a = 0.3f;
-            //imgIcon.color = imgIconColor;
+            imgIconColor.a = 0.3f;
+            imgIcon.color = imgIconColor;
+
+            float ratio = 1.0f - (UIManager.Instance.elementalSkillCooltime_ / 5.0f);
+            imgGauge.fillAmount = ratio;
 
             txtCooltime.gameObject.SetActive(true);
             txtCooltime.text = UIManager.Instance.elementalSkillCooltime_.ToString("N1");
         }
-        else if(UIManager.Instance.elementalBurstCooltime_ <= 15.0f && imgIcon.name == "GustSurge")
+
+        if (UIManager.Instance.IsElementalBurstCooltime && UIManager.Instance.IsFullEnergy && imgIcon.name == "GustSurge")
+        {
+            txtCooltime.gameObject.SetActive(false);
+            imgIconColor.a = 1.0f;
+            imgIcon.color = imgIconColor;
+
+            float ratio = UIManager.Instance.EnergyGauge / 100.0f;
+            if (ratio > 1.0f)
+                ratio = 1.0f;
+            imgEnergyGauge.fillAmount = ratio;
+        }
+        else if(!UIManager.Instance.IsFullEnergy && imgIcon.name == "GustSurge")
+        {
+            txtCooltime.gameObject.SetActive(false);
+            imgIconColor.a = 0.3f;
+            imgIcon.color = imgIconColor;
+
+            float ratio = UIManager.Instance.EnergyGauge / 100.0f;
+            if (ratio > 1.0f)
+                ratio = 1.0f;
+            imgEnergyGauge.fillAmount = ratio;
+        }
+
+        if(!UIManager.Instance.IsFullEnergy && !UIManager.Instance.IsElementalBurstCooltime && imgIcon.name == "GustSurge")
         {
             imgGauge.fillAmount = 1;
-            //imgIconColor.a = 0.3f;
-            //imgIcon.color = imgIconColor;
+            imgIconColor.a = 0.3f;
+            imgIcon.color = imgIconColor;
+
+            float ratio = 1.0f - (UIManager.Instance.elementalBurstCooltime_ / 15.0f);
+            imgGauge.fillAmount = ratio;
 
             txtCooltime.gameObject.SetActive(true);
             txtCooltime.text = UIManager.Instance.elementalBurstCooltime_.ToString("N1");
-        }
-        else
-        {
-            txtCooltime.gameObject.SetActive(false);
+
+            float ratio_ = UIManager.Instance.EnergyGauge / 100.0f;
+            if (ratio_ > 1.0f)
+                ratio_ = 1.0f;
+            imgEnergyGauge.fillAmount = ratio_;
         }
     }
+
 }

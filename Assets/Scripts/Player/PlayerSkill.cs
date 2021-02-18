@@ -8,17 +8,25 @@ public class PlayerSkill : MonoBehaviour
 
     private GameObject palmVortex;
     private GameObject gustSurge;
+
     private bool isActivePalmVortex = true;
     private bool isActiveGustSurge = true;
+    private bool isFullEnergy = false;
+    public bool IsActivePalmVortex { get; }
+    public bool IsActiveGustSurge { get; }
+    public bool IsFullEnergy { get; }
 
     private Vector3 scaleChange;
     private float scaleChangeSpeed = 7.0f;
     static GameObject obj = null;
     static GameObject obj2 = null;
 
+    private float maxEnergyGauge = 100.0f;
+    private float energyGauge = 0.0f;
+    public bool EnergyGauge { get; }
+
     private float palmVortexCooltime = 5.0f;
     private float gustSurgeCooltime = 15.0f;
-
     public float GetPalmVortexCooltime() { return palmVortexCooltime; }
     public float GetGustSurgeCooltime() { return gustSurgeCooltime; }
 
@@ -48,7 +56,8 @@ public class PlayerSkill : MonoBehaviour
 
         if (isActiveGustSurge)
         {
-            GustSurge();
+            if(isFullEnergy)
+                GustSurge();
         }
         else
         {
@@ -59,8 +68,7 @@ public class PlayerSkill : MonoBehaviour
                 gustSurgeCooltime = 15.0f;
             }
         }
-        UIManager.Instance.elementalSkillCooltime_ = palmVortexCooltime;
-        UIManager.Instance.elementalBurstCooltime_ = gustSurgeCooltime;
+        UpdateGlobal();
     }
 
     void PalmVortex()
@@ -68,6 +76,9 @@ public class PlayerSkill : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && obj == null)
         {
             obj = Instantiate(palmVortex, transform.position + transform.forward * 1.3f + transform.up * 0.9f, transform.rotation);
+            energyGauge += 30.0f;
+            if (energyGauge > maxEnergyGauge)
+                isFullEnergy = true;
         }
         if (Input.GetKey(KeyCode.E))
         {
@@ -87,6 +98,9 @@ public class PlayerSkill : MonoBehaviour
         {
             player.playerState = PlayerState.Elemental_Burst;
             obj2 = Instantiate(gustSurge, transform.position + transform.forward * 1.3f + transform.up * 0.9f, transform.rotation);
+            isActiveGustSurge = false;
+            isFullEnergy = false;
+            energyGauge = 0.0f;
             Invoke("InitGustSurge", 6f);
         }
     }
@@ -111,7 +125,16 @@ public class PlayerSkill : MonoBehaviour
             Destroy(obj2.gameObject);
             obj2 = null;
             player.playerState = PlayerState.None;
-            isActiveGustSurge = false;
         }
+    }
+
+    void UpdateGlobal()
+    {
+        UIManager.Instance.elementalSkillCooltime_ = palmVortexCooltime;
+        UIManager.Instance.elementalBurstCooltime_ = gustSurgeCooltime;
+        UIManager.Instance.IsElementalSkillCooltime = isActivePalmVortex;
+        UIManager.Instance.IsElementalBurstCooltime = isActiveGustSurge;
+        UIManager.Instance.IsFullEnergy = isFullEnergy;
+        UIManager.Instance.EnergyGauge = energyGauge;
     }
 }

@@ -36,7 +36,10 @@ public class PlayerAnimController : MonoBehaviour
         }
 
         if (h == 0 && v == 0)
+        {
             animator.SetBool("Walk", false);
+            animator.SetBool("Run", false);
+        }
 
         if (h == 0 && v == 0 && player.playerState == PlayerState.Climbing)
             animator.speed = 0;
@@ -54,8 +57,13 @@ public class PlayerAnimController : MonoBehaviour
         else
             animator.SetBool("Climbing", false);
 
+        if (player.playerState == PlayerState.Running)
+            animator.SetBool("Run", true);
+        else
+            animator.SetBool("Run", false);
+
         /*skill*/
-        if(Input.GetKey(KeyCode.E) && player.playerState == PlayerState.Elemental_Skill)
+        if (Input.GetKey(KeyCode.E) && player.playerState == PlayerState.Elemental_Skill)
             animator.SetBool("PalmVortex", true);
         else
             animator.SetBool("PalmVortex", false);

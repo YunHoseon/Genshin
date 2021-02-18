@@ -8,12 +8,13 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     [SerializeField]
-    private float moveSpeed = 3.0f;
+    private float moveSpeed = 2.0f;
     [SerializeField]
     private float jumpPower = 10.0f;
     [SerializeField]
     private float rotateSpeed = 5.0f;
 
+    private bool isGround = true;
     private bool isJumping = false;
     private bool isClimbing = false;
 
@@ -29,6 +30,8 @@ public class PlayerMove : MonoBehaviour
 
     private Player player = null;
     private PlayerAnimController playerAnimController = null;
+
+    private float intervalTime = 2.0f;
 
     void Start()
     {
@@ -53,6 +56,28 @@ public class PlayerMove : MonoBehaviour
             playerAnimController.isAttacking = true;
         }
 
+         if (Input.GetMouseButtonDown(1))
+        {
+            intervalTime = 2.0f;
+            if (player.playerStamina_ > 0)
+            {
+                Dash();
+                if (player.playerStamina_ > 0)
+                {
+                    player.playerState = PlayerState.Running;
+                }
+            }
+        }
+
+        if(player.playerState != PlayerState.Running)
+        {
+            intervalTime -= Time.deltaTime;
+
+            if (intervalTime <= 0.0f && player.playerStamina_ < player.PlayerMaxStamina)
+                player.playerStamina_ += 0.2f;
+        }
+
+        Debug.Log(player.playerStamina_);
         UpdateRay();
         FindRayHits();
     }
@@ -61,8 +86,13 @@ public class PlayerMove : MonoBehaviour
     {
         if(player.playerState == PlayerState.Climbing)
         {
-            //isClimbing = true;
             Climbing(horizontalMove, verticalMove);
+        }
+        else if(player.playerState == PlayerState.Running)
+        {
+            Run(horizontalMove, verticalMove);
+            Jump();
+            Rotate();
         }
         else if (!playerAnimController.isAttacking)
         {
@@ -74,7 +104,7 @@ public class PlayerMove : MonoBehaviour
 
     void Walk(float h, float v)
     {
-        moveSpeed = 3.0f;
+        moveSpeed = 2.0f;
         rigidbody.useGravity = true;
 
         movement.Set(h, 0, v);
@@ -103,10 +133,26 @@ public class PlayerMove : MonoBehaviour
 
     void Climbing(float h, float v)
     {
-        moveSpeed = 1.5f;
+        moveSpeed = 1.0f;
         rigidbody.useGravity = false;
 
         movement.Set(h, v, 0);
+        movement = movement.normalized * moveSpeed * Time.deltaTime;
+
+        rigidbody.MovePosition(transform.position + movement);
+    }
+
+    void Dash()
+    {
+        rigidbody.MovePosition(transform.position + transform.forward * 0.8f);
+        player.playerStamina_ -= 1.0f;
+    }
+
+    void Run(float h, float v)
+    {
+        moveSpeed = 4.0f;
+
+        movement.Set(h, 0, v);
         movement = movement.normalized * moveSpeed * Time.deltaTime;
 
         rigidbody.MovePosition(transform.position + movement);
@@ -124,14 +170,31 @@ public class PlayerMove : MonoBehaviour
 
         for (int i = 0; i < rayHits.Length; i++)
         {
-            if (rayHits[i].collider.gameObject.CompareTag("Wall"))
+            if (rayHits[i].collider.gameObject.CompareTag("Wall") && isClimbing)
             {
                 player.playerState = PlayerState.Climbing;
                 return;
             }
         }
-
         isClimbing = false;
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        //if(col.CompareTag("Ground"))
+            //isGround = true;
+
+        if(col.CompareTag("Wall"))
+            isClimbing = true;
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        //if (col.CompareTag("Ground"))
+        //isGround = false;
+
+        if (col.CompareTag("Wall"))
+            isClimbing = false;
     }
 
     private void OnDrawGizmos()

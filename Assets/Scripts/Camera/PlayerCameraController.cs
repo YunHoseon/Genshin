@@ -10,6 +10,9 @@ public class PlayerCameraController : MonoBehaviour
     private float offsetY = 0.6f;
     private float offsetZ = -3;
 
+    private float rotateSpeedY = 10.0f;
+    private float rotateSpeed = 10.0f;
+
     [SerializeField]
     private float followSpeed = 3;
 

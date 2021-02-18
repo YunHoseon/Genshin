@@ -9,6 +9,7 @@ public enum PlayerState
     Normal_Attack,
     Elemental_Skill,
     Elemental_Burst,
+    Running,
     Climbing,
     Swimming,
     Die,
@@ -27,7 +28,9 @@ public class Player : MonoBehaviour
     private float playerAtk;
     private float playerGrd;
     private float playerStamina;
-    private float playerMaxStamina = 10.0f;
+    private float playerMaxStamina = 100.0f;
+    public float playerStamina_ { get; set; }
+    public float PlayerMaxStamina { get;}
 
     private bool isInMenu = false;
     public GameObject menu;
@@ -47,11 +50,6 @@ public class Player : MonoBehaviour
         GoToMenu();
     }
 
-    void PlayerRayCast()
-    {
-
-    }
-
     void OnOffPlayerScript()
     {
         if (playerState == PlayerState.None)
@@ -67,6 +65,7 @@ public class Player : MonoBehaviour
         {
             GetComponent<PlayerMove>().enabled = false;
             GetComponent<PlayerAttack>().enabled = true;
+            GetComponent<PlayerSkill>().enabled = true;
             GetComponent<PlayerAnimController>().enabled = true;
 
             playerAttack.weapon.SetActive(true);
@@ -92,7 +91,7 @@ public class Player : MonoBehaviour
         {
             GetComponent<PlayerMove>().enabled = false;
             GetComponent<PlayerAttack>().enabled = false;
-            //GetComponent<PlayerAnimController>().enabled = false;
+            GetComponent<PlayerSkill>().enabled = false;
         }
     }
 
