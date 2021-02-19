@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
     public bool GetIsExitGame() { return isExitGame; }
     public void SetIsExitGame(bool _isExitGame) { isExitGame = _isExitGame; }
 
+    public float playerStamina { get; set; }
+    public float playerMaxStamina { get; set; } = 100.0f;
+
     void OnGUI()
     {
         if (sceneID == 0)      //start scene
@@ -59,7 +62,7 @@ public class GameManager : MonoBehaviour
         }
         else if (sceneID == 2) //game scene
         {
-            if(isExitGame)
+            if (isExitGame)
             {
                 SceneManager.LoadScene("StartScene");
                 isExitGame = false;

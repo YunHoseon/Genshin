@@ -19,9 +19,9 @@ public class SkillUI : MonoBehaviour
         imgIcon.color = imgIconColor;
 
         if (imgIcon.name == "PalmVortex")
-            txtCooltime.text = UIManager.Instance.elementalSkillCooltime_.ToString("N1");
+            txtCooltime.text = UIManager.Instance.ElementalSkillCooltime.ToString("N1");
         else if(imgIcon.name == "GustSurge")
-            txtCooltime.text = UIManager.Instance.elementalBurstCooltime_.ToString("N1");
+            txtCooltime.text = UIManager.Instance.ElementalBurstCooltime.ToString("N1");
     }
     
     void Update()
@@ -43,11 +43,11 @@ public class SkillUI : MonoBehaviour
             imgIconColor.a = 0.3f;
             imgIcon.color = imgIconColor;
 
-            float ratio = 1.0f - (UIManager.Instance.elementalSkillCooltime_ / 5.0f);
+            float ratio = 1.0f - (UIManager.Instance.ElementalSkillCooltime / 5.0f);
             imgGauge.fillAmount = ratio;
 
             txtCooltime.gameObject.SetActive(true);
-            txtCooltime.text = UIManager.Instance.elementalSkillCooltime_.ToString("N1");
+            txtCooltime.text = UIManager.Instance.ElementalSkillCooltime.ToString("N1");
         }
 
         if (UIManager.Instance.IsElementalBurstCooltime && UIManager.Instance.IsFullEnergy && imgIcon.name == "GustSurge")
@@ -79,11 +79,11 @@ public class SkillUI : MonoBehaviour
             imgIconColor.a = 0.3f;
             imgIcon.color = imgIconColor;
 
-            float ratio = 1.0f - (UIManager.Instance.elementalBurstCooltime_ / 15.0f);
+            float ratio = 1.0f - (UIManager.Instance.ElementalBurstCooltime / 15.0f);
             imgGauge.fillAmount = ratio;
 
             txtCooltime.gameObject.SetActive(true);
-            txtCooltime.text = UIManager.Instance.elementalBurstCooltime_.ToString("N1");
+            txtCooltime.text = UIManager.Instance.ElementalBurstCooltime.ToString("N1");
 
             float ratio_ = UIManager.Instance.EnergyGauge / 100.0f;
             if (ratio_ > 1.0f)
@@ -91,5 +91,4 @@ public class SkillUI : MonoBehaviour
             imgEnergyGauge.fillAmount = ratio_;
         }
     }
-
 }

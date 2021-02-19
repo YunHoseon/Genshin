@@ -130,8 +130,8 @@ public class PlayerSkill : MonoBehaviour
 
     void UpdateGlobal()
     {
-        UIManager.Instance.elementalSkillCooltime_ = palmVortexCooltime;
-        UIManager.Instance.elementalBurstCooltime_ = gustSurgeCooltime;
+        UIManager.Instance.ElementalSkillCooltime = palmVortexCooltime;
+        UIManager.Instance.ElementalBurstCooltime = gustSurgeCooltime;
         UIManager.Instance.IsElementalSkillCooltime = isActivePalmVortex;
         UIManager.Instance.IsElementalBurstCooltime = isActiveGustSurge;
         UIManager.Instance.IsFullEnergy = isFullEnergy;

@@ -35,10 +35,9 @@ public class PlayerAnimController : MonoBehaviour
             PlayAttack();
         }
 
-        if (h == 0 && v == 0)
+        if(Input.GetMouseButtonDown(1))
         {
-            animator.SetBool("Walk", false);
-            animator.SetBool("Run", false);
+            animator.SetTrigger("Dash");
         }
 
         if (h == 0 && v == 0 && player.playerState == PlayerState.Climbing)
@@ -58,7 +57,10 @@ public class PlayerAnimController : MonoBehaviour
             animator.SetBool("Climbing", false);
 
         if (player.playerState == PlayerState.Running)
+        {
             animator.SetBool("Run", true);
+            animator.SetBool("Walk", false);
+        }
         else
             animator.SetBool("Run", false);
 
@@ -70,6 +72,13 @@ public class PlayerAnimController : MonoBehaviour
 
         if(Input.GetKey(KeyCode.Q) && player.playerState == PlayerState.Elemental_Burst)
             animator.SetBool("GustSurge", true);
+
+        if (h == 0 && v == 0)
+        {
+            animator.SetBool("Walk", false);
+            animator.SetBool("Run", false);
+            player.playerState = PlayerState.None;
+        }
     }
 
     void FixedUpdate()

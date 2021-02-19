@@ -27,10 +27,6 @@ public class Player : MonoBehaviour
     private float playerMaxHp;
     private float playerAtk;
     private float playerGrd;
-    private float playerStamina;
-    private float playerMaxStamina = 100.0f;
-    public float playerStamina_ { get; set; }
-    public float PlayerMaxStamina { get;}
 
     private bool isInMenu = false;
     public GameObject menu;
@@ -48,6 +44,16 @@ public class Player : MonoBehaviour
     {
         OnOffPlayerScript();
         GoToMenu();
+
+        if(playerState != PlayerState.Running)
+        {
+            if(GameManager.Instance.playerStamina < GameManager.Instance.playerMaxStamina)
+            {
+                GameManager.Instance.playerStamina += 10.0f * Time.deltaTime;
+                if(GameManager.Instance.playerStamina > GameManager.Instance.playerMaxStamina)
+                    GameManager.Instance.playerStamina = GameManager.Instance.playerMaxStamina;
+            }
+        }
     }
 
     void OnOffPlayerScript()

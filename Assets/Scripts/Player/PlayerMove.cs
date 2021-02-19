@@ -17,6 +17,7 @@ public class PlayerMove : MonoBehaviour
     private bool isGround = true;
     private bool isJumping = false;
     private bool isClimbing = false;
+    private bool isDashing = false;
 
     private float horizontalMove;
     private float verticalMove;
@@ -31,7 +32,9 @@ public class PlayerMove : MonoBehaviour
     private Player player = null;
     private PlayerAnimController playerAnimController = null;
 
-    private float intervalTime = 2.0f;
+    private float dashTimer = 0.3f;
+    private float dashStamina = 15.0f;
+    private float runStamina = 10.0f;
 
     void Start()
     {
@@ -40,6 +43,7 @@ public class PlayerMove : MonoBehaviour
         player = GetComponent<Player>();
 
         ray = new Ray(transform.position, transform.forward);
+        GameManager.Instance.playerStamina = GameManager.Instance.playerMaxStamina;
     }
 
     void Update()
@@ -56,30 +60,27 @@ public class PlayerMove : MonoBehaviour
             playerAnimController.isAttacking = true;
         }
 
-         if (Input.GetMouseButtonDown(1))
+         if (Input.GetMouseButtonDown(1) && GameManager.Instance.playerStamina > dashStamina)
         {
-            intervalTime = 2.0f;
-            if (player.playerStamina_ > 0)
-            {
-                Dash();
-                if (player.playerStamina_ > 0)
-                {
-                    player.playerState = PlayerState.Running;
-                }
-            }
+            Dash();
+
+            if (GameManager.Instance.playerStamina > 0.0f)
+                player.playerState = PlayerState.Running;
+            else
+                player.playerState = PlayerState.None;
         }
 
-        if(player.playerState != PlayerState.Running)
-        {
-            intervalTime -= Time.deltaTime;
-
-            if (intervalTime <= 0.0f && player.playerStamina_ < player.PlayerMaxStamina)
-                player.playerStamina_ += 0.2f;
-        }
-
-        Debug.Log(player.playerStamina_);
+        //Debug.Log(GameManager.Instance.playerStamina);
         UpdateRay();
         FindRayHits();
+
+        if (GameManager.Instance.playerStamina <= 0.0f)
+        {
+            GameManager.Instance.playerStamina = 0;
+            player.playerState = PlayerState.None;
+        }
+
+        CheckIsDash();
     }
 
     void FixedUpdate()
@@ -144,13 +145,31 @@ public class PlayerMove : MonoBehaviour
 
     void Dash()
     {
-        rigidbody.MovePosition(transform.position + transform.forward * 0.8f);
-        player.playerStamina_ -= 1.0f;
+        isDashing = true;
+        GameManager.Instance.playerStamina -= dashStamina;
+    }
+
+    void CheckIsDash()
+    {
+        if (isDashing)
+        {
+            dashTimer -= Time.deltaTime;
+            if (dashTimer <= 0.0f)
+            {
+                isDashing = false;
+                dashTimer = 0.3f;
+            }
+        }
     }
 
     void Run(float h, float v)
     {
-        moveSpeed = 4.0f;
+        if (!isDashing)
+            moveSpeed = 4.0f;
+        else
+            moveSpeed = 10.0f;
+
+        GameManager.Instance.playerStamina -= runStamina * Time.deltaTime;
 
         movement.Set(h, 0, v);
         movement = movement.normalized * moveSpeed * Time.deltaTime;
