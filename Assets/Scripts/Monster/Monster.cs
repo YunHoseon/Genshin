@@ -4,9 +4,10 @@ using UnityEngine;
 
 public enum MonsterState
 {
-    None = 0,
-    Attaking,
+    Idle = 0,
     Moving,
+    Attaking,
+    Damaged,
     Die,
     InMenu
 }
@@ -15,6 +16,9 @@ public class Monster : MonoBehaviour
 {
     public MonsterState monsterState;
     private Element monsterElement;
+    private Animator animator;
+
+    public GameObject player;
 
     private float monsterMaxHp;
     private float monsterHp;
@@ -25,20 +29,39 @@ public class Monster : MonoBehaviour
 
     void Awake()
     {
-        monsterState = MonsterState.None;
+        monsterState = MonsterState.Idle;
+        animator = GetComponentInChildren<Animator>();
     }
 
     void Update()
     {
         if(monsterHp <= 0)
         {
-            Destroy(this.gameObject, 0.1f);
+            //Destroy(this.gameObject, 0.1f);
+        }
+
+        if(Vector3.Distance(player.transform.position, transform.position) < 2.0f)
+        {
+            monsterState = MonsterState.Attaking;
+            animator.SetBool("Attack", true);
+        }
+        else
+        {
+            animator.SetBool("Attack", false);
         }
     }
 
     void OntriggerEnter(Collider col)
     {
         if(col.CompareTag("Weapon"))
+        {
+
+        }
+        if (col.CompareTag("PalmVortex"))
+        {
+
+        }
+        if (col.CompareTag("GustSurge"))
         {
 
         }

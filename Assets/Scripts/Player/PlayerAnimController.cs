@@ -77,7 +77,9 @@ public class PlayerAnimController : MonoBehaviour
         {
             animator.SetBool("Walk", false);
             animator.SetBool("Run", false);
-            player.playerState = PlayerState.None;
+
+            if(player.playerState != PlayerState.Normal_Attack)
+                player.playerState = PlayerState.None;
         }
     }
 

@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
     private float playerMaxHp;
     private float playerAtk;
     private float playerGrd;
+    public float PlayerStamina { get; set; }
+    public float PlayerMaxStamina { get; set; } = 100.0f;
 
     private bool isInMenu = false;
     public GameObject menu;

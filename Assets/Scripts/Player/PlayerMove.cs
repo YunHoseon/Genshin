@@ -61,14 +61,14 @@ public class PlayerMove : MonoBehaviour
         }
 
          if (Input.GetMouseButtonDown(1) && GameManager.Instance.playerStamina > dashStamina)
-        {
+         {
             Dash();
 
             if (GameManager.Instance.playerStamina > 0.0f)
                 player.playerState = PlayerState.Running;
             else
                 player.playerState = PlayerState.None;
-        }
+         }
 
         //Debug.Log(GameManager.Instance.playerStamina);
         UpdateRay();

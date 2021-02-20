@@ -8,8 +8,9 @@ TagManager:
   - Enemy
   - Ingredient
   - Weapon
-  - Skill
   - Wall
+  - GustSurge
+  - PalmVortex
   layers:
   - Default
   - TransparentFX

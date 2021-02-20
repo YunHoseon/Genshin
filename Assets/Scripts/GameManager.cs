@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
     public bool GetIsExitGame() { return isExitGame; }
     public void SetIsExitGame(bool _isExitGame) { isExitGame = _isExitGame; }
 
+    public GameObject PlayerObject { get; set; }
+    public Player player { get; set; }
+
     public float playerStamina { get; set; }
     public float playerMaxStamina { get; set; } = 100.0f;
 
@@ -52,7 +55,6 @@ public class GameManager : MonoBehaviour
             if(isStart)
             {
                 SceneManager.LoadScene("LoadingScene");
-                //SceneManager.LoadScene("GameScene");
                 isStart = false;
             }
         }
@@ -62,6 +64,16 @@ public class GameManager : MonoBehaviour
         }
         else if (sceneID == 2) //game scene
         {
+            if(PlayerObject == null)
+            {
+                PlayerObject = GameObject.Find("Player");
+                if(PlayerObject != null)
+                {
+                    player = PlayerObject.GetComponent<Player>();
+                    Debug.Log("플레이어 초기화");
+                }
+            }
+
             if (isExitGame)
             {
                 SceneManager.LoadScene("StartScene");
