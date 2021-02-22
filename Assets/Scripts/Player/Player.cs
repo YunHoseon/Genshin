@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
 
     public int playerLevel { get; set; } = 1;
     public float playerHp { get; set; }
-    private float playerMaxHp = 912;
+    public float playerMaxHp = 912;
     private float playerAtk;
     private float playerGrd;
     public float PlayerStamina { get; set; }

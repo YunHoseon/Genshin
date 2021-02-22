@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum MonsterState
 {
@@ -18,11 +19,16 @@ public class Monster : MonoBehaviour
     private Element monsterElement;
     private Animator animator;
 
+    public Slider hpBar;
+    public Text txtLevel;
+    public GameObject fillArea;
+
     private GameObject player;
     private GameObject attackCollider;
 
     private float findDistance = 2.0f;
 
+    private int monsterLevel = 1;
     private float monsterMaxHp = 30.0f;
     private float monsterHp;
     private float monsterAtk = 10.0f;
@@ -41,11 +47,17 @@ public class Monster : MonoBehaviour
     {
         player = GameObject.Find("Player");
         attackCollider = transform.GetChild(1).gameObject;
+        txtLevel.text = "Lv." + monsterLevel.ToString("N0");
     }
 
     void Update()
     {
-        if(monsterHp <= 0)
+        OnOffFillArea();
+
+        float ratio = monsterHp / monsterMaxHp;
+        hpBar.value = ratio;
+
+        if (monsterHp <= 0)
         {
             monsterState = MonsterState.Die;
             Destroy(this.gameObject, 0.1f);
@@ -90,11 +102,11 @@ public class Monster : MonoBehaviour
         }
     }
 
-    void OntriggerEnter(Collider col)
+    void OnTriggerEnter(Collider col)
     {
         if(col.CompareTag("Weapon"))
         {
-
+            monsterHp -= 10;
         }
         if (col.CompareTag("PalmVortex"))
         {
@@ -118,5 +130,13 @@ public class Monster : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         
         attackCollider.SetActive(false);
+    }
+
+    void OnOffFillArea()
+    {
+        if (hpBar.value <= 0)
+            fillArea.SetActive(false);
+        else
+            fillArea.SetActive(true);
     }
 }

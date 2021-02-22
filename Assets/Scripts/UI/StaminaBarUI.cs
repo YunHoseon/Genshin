@@ -19,7 +19,7 @@ public class StaminaBarUI : MonoBehaviour
             OnOffFillArea();
         }
 
-        float ratio = GameManager.Instance.player.PlayerStamina / 100.0f;
+        float ratio = GameManager.Instance.player.PlayerStamina / GameManager.Instance.player.PlayerMaxStamina;
         staminaBar.value = ratio;
     }
 
