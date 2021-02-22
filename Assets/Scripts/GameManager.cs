@@ -45,9 +45,6 @@ public class GameManager : MonoBehaviour
     public GameObject PlayerObject { get; set; }
     public Player player { get; set; }
 
-    public float playerStamina { get; set; }
-    public float playerMaxStamina { get; set; } = 100.0f;
-
     void OnGUI()
     {
         if (sceneID == 0)      //start scene

@@ -18,35 +18,74 @@ public class Monster : MonoBehaviour
     private Element monsterElement;
     private Animator animator;
 
-    public GameObject player;
+    private GameObject player;
+    private GameObject attackCollider;
 
-    private float monsterMaxHp;
+    private float findDistance = 2.0f;
+
+    private float monsterMaxHp = 30.0f;
     private float monsterHp;
-    private float monsterAtk;
-    private float monsterGrd;
+    private float monsterAtk = 10.0f;
+    private float monsterGrd = 5.0f;
 
     private bool isInMenu = false;
 
     void Awake()
     {
+        monsterHp = monsterMaxHp;
         monsterState = MonsterState.Idle;
         animator = GetComponentInChildren<Animator>();
+    }
+
+    void Start()
+    {
+        player = GameObject.Find("Player");
+        attackCollider = transform.GetChild(1).gameObject;
     }
 
     void Update()
     {
         if(monsterHp <= 0)
         {
-            //Destroy(this.gameObject, 0.1f);
+            monsterState = MonsterState.Die;
+            Destroy(this.gameObject, 0.1f);
         }
 
-        if(Vector3.Distance(player.transform.position, transform.position) < 2.0f)
+        switch (monsterState)
+        {
+            case MonsterState.Idle:
+                Idle();
+                break;
+            case MonsterState.Moving:
+                break;
+            case MonsterState.Attaking:
+                Attack();
+                break;
+            case MonsterState.Damaged:
+                break;
+            case MonsterState.Die:
+                break;
+        }
+    }
+
+    void Idle()
+    {
+        if (Vector3.Distance(player.transform.position, transform.position) < findDistance)
         {
             monsterState = MonsterState.Attaking;
             animator.SetBool("Attack", true);
         }
+    }
+
+    void Attack()
+    {
+        if (Vector3.Distance(player.transform.position, transform.position) < findDistance)
+        {
+            animator.SetBool("Attack", true);
+        }
         else
         {
+            monsterState = MonsterState.Idle;
             animator.SetBool("Attack", false);
         }
     }
@@ -65,5 +104,19 @@ public class Monster : MonoBehaviour
         {
 
         }
+    }
+
+    public void ActiveCol()
+    {
+        StartCoroutine("AttackTimer");
+    }
+
+    IEnumerator AttackTimer()
+    {
+        attackCollider.SetActive(true);
+        GameManager.Instance.player.Damaged(monsterAtk);
+        yield return new WaitForSeconds(0.5f);
+        
+        attackCollider.SetActive(false);
     }
 }

@@ -26,18 +26,21 @@ public class PlayerAnimController : MonoBehaviour
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetButtonDown("Jump"))
-            isJumping = true;
-
-        if (Input.GetMouseButtonDown(0))
+        if(player.playerState != PlayerState.Climbing)
         {
-            isAttacking = true;
-            PlayAttack();
-        }
+            if (Input.GetButtonDown("Jump"))
+                isJumping = true;
 
-        if(Input.GetMouseButtonDown(1))
-        {
-            animator.SetTrigger("Dash");
+            if (Input.GetMouseButtonDown(0))
+            {
+                isAttacking = true;
+                PlayAttack();
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                animator.SetTrigger("Dash");
+            }
         }
 
         if (h == 0 && v == 0 && player.playerState == PlayerState.Climbing)
@@ -52,7 +55,10 @@ public class PlayerAnimController : MonoBehaviour
         }
 
         if(player.playerState == PlayerState.Climbing)
+        {
             animator.SetBool("Climbing", true);
+            animator.SetBool("Walk", false);
+        }
         else
             animator.SetBool("Climbing", false);
 
@@ -78,7 +84,7 @@ public class PlayerAnimController : MonoBehaviour
             animator.SetBool("Walk", false);
             animator.SetBool("Run", false);
 
-            if(player.playerState != PlayerState.Normal_Attack)
+            if(player.playerState != PlayerState.Normal_Attack && player.playerState != PlayerState.Climbing)
                 player.playerState = PlayerState.None;
         }
     }

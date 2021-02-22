@@ -26,7 +26,7 @@ public class PlayerMove : MonoBehaviour
     private Vector3 movement;
 
     private Ray ray;
-    private float distance = 0.5f;
+    private float distance = 0.8f;
     private RaycastHit[] rayHits;
 
     private Player player = null;
@@ -43,7 +43,7 @@ public class PlayerMove : MonoBehaviour
         player = GetComponent<Player>();
 
         ray = new Ray(transform.position, transform.forward);
-        GameManager.Instance.playerStamina = GameManager.Instance.playerMaxStamina;
+        player.PlayerStamina = player.PlayerMaxStamina;
     }
 
     void Update()
@@ -60,23 +60,22 @@ public class PlayerMove : MonoBehaviour
             playerAnimController.isAttacking = true;
         }
 
-         if (Input.GetMouseButtonDown(1) && GameManager.Instance.playerStamina > dashStamina)
+         if (Input.GetMouseButtonDown(1) && player.PlayerStamina > dashStamina)
          {
             Dash();
 
-            if (GameManager.Instance.playerStamina > 0.0f)
+            if (player.PlayerStamina > 0.0f)
                 player.playerState = PlayerState.Running;
             else
                 player.playerState = PlayerState.None;
          }
-
-        //Debug.Log(GameManager.Instance.playerStamina);
+        
         UpdateRay();
         FindRayHits();
 
-        if (GameManager.Instance.playerStamina <= 0.0f)
+        if (player.PlayerStamina <= 0.0f)
         {
-            GameManager.Instance.playerStamina = 0;
+            player.PlayerStamina = 0;
             player.playerState = PlayerState.None;
         }
 
@@ -146,7 +145,7 @@ public class PlayerMove : MonoBehaviour
     void Dash()
     {
         isDashing = true;
-        GameManager.Instance.playerStamina -= dashStamina;
+        player.PlayerStamina -= dashStamina;
     }
 
     void CheckIsDash()
@@ -169,7 +168,7 @@ public class PlayerMove : MonoBehaviour
         else
             moveSpeed = 10.0f;
 
-        GameManager.Instance.playerStamina -= runStamina * Time.deltaTime;
+        player.PlayerStamina -= runStamina * Time.deltaTime;
 
         movement.Set(h, 0, v);
         movement = movement.normalized * moveSpeed * Time.deltaTime;
@@ -195,23 +194,22 @@ public class PlayerMove : MonoBehaviour
                 return;
             }
         }
-        isClimbing = false;
+
+        if(player.playerState == PlayerState.Climbing)
+            player.playerState = PlayerState.None;
     }
 
-    void OnTriggerEnter(Collider col)
+    void OnTriggerStay(Collider col)
     {
-        //if(col.CompareTag("Ground"))
-            //isGround = true;
-
         if(col.CompareTag("Wall"))
+        {
+            Debug.Log("등반중");
             isClimbing = true;
+        }
     }
 
     void OnTriggerExit(Collider col)
     {
-        //if (col.CompareTag("Ground"))
-        //isGround = false;
-
         if (col.CompareTag("Wall"))
             isClimbing = false;
     }

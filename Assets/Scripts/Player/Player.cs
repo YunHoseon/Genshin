@@ -23,8 +23,9 @@ public class Player : MonoBehaviour
     private PlayerAttack playerAttack;
     public PlayerSkill playerSkill;
 
-    private float playerHp;
-    private float playerMaxHp;
+    public int playerLevel { get; set; } = 1;
+    public float playerHp { get; set; }
+    private float playerMaxHp = 912;
     private float playerAtk;
     private float playerGrd;
     public float PlayerStamina { get; set; }
@@ -37,6 +38,7 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        playerHp = playerMaxHp;
         playerState = PlayerState.None;
         playerAttack = GetComponent<PlayerAttack>();
         playerSkill = GetComponent<PlayerSkill>();
@@ -49,11 +51,11 @@ public class Player : MonoBehaviour
 
         if(playerState != PlayerState.Running)
         {
-            if(GameManager.Instance.playerStamina < GameManager.Instance.playerMaxStamina)
+            if(PlayerStamina < PlayerMaxStamina)
             {
-                GameManager.Instance.playerStamina += 10.0f * Time.deltaTime;
-                if(GameManager.Instance.playerStamina > GameManager.Instance.playerMaxStamina)
-                    GameManager.Instance.playerStamina = GameManager.Instance.playerMaxStamina;
+                PlayerStamina += 10.0f * Time.deltaTime;
+                if(PlayerStamina > PlayerMaxStamina)
+                    PlayerStamina = PlayerMaxStamina;
             }
         }
     }
@@ -120,6 +122,11 @@ public class Player : MonoBehaviour
                 menu.SetActive(false);
             }
         }
+    }
+
+    public void Damaged(float atk)
+    {
+        playerHp -= atk;
     }
 
     void OnTriggerStay(Collider col)
