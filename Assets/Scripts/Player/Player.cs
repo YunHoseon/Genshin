@@ -12,14 +12,14 @@ public enum PlayerState
     Running,
     Climbing,
     Swimming,
-    Die,
-    InMenu
+    Die
 }
 
 public class Player : MonoBehaviour
 {
     public PlayerState playerState;
     private Element playerElement;
+    public Inventory playerInventory;
     private PlayerAttack playerAttack;
     public PlayerSkill playerSkill;
 
@@ -31,8 +31,9 @@ public class Player : MonoBehaviour
     public float PlayerStamina { get; set; }
     public float PlayerMaxStamina { get; set; } = 100.0f;
 
-    private bool isInMenu = false;
-    public GameObject menu;
+    public bool isInMenu { get; set; } = false;
+    public bool isInInventory { get; set; } = false;
+
     public GameObject ingredientUI;
     public Text txtIngredientName;
 
@@ -47,7 +48,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         OnOffPlayerScript();
-        GoToMenu();
 
         if(playerState != PlayerState.Running)
         {
@@ -97,30 +97,12 @@ public class Player : MonoBehaviour
             playerAttack.weapon.SetActive(true);
             playerAttack.backWeapon.SetActive(false);
         }
-        else if (playerState == PlayerState.InMenu)
+        else if (isInMenu)
         {
+            //GetComponent<PlayerAnimController>().enabled = false;
             GetComponent<PlayerMove>().enabled = false;
             GetComponent<PlayerAttack>().enabled = false;
             GetComponent<PlayerSkill>().enabled = false;
-        }
-    }
-
-    void GoToMenu()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            isInMenu = isInMenu ? false : true;
-
-            if (isInMenu)
-            {
-                playerState = PlayerState.InMenu;
-                menu.SetActive(true);
-            }
-            else
-            {
-                playerState = PlayerState.None;
-                menu.SetActive(false);
-            }
         }
     }
 

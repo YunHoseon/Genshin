@@ -31,16 +31,14 @@ public class PlayerAnimController : MonoBehaviour
             if (Input.GetButtonDown("Jump"))
                 isJumping = true;
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && (player.isInMenu && player.isInInventory))
             {
                 isAttacking = true;
                 PlayAttack();
             }
 
             if (Input.GetMouseButtonDown(1))
-            {
                 animator.SetTrigger("Dash");
-            }
         }
 
         if (h == 0 && v == 0 && player.playerState == PlayerState.Climbing)
@@ -48,7 +46,7 @@ public class PlayerAnimController : MonoBehaviour
         else
             animator.speed = 1;
  
-        if(player.playerState == PlayerState.InMenu)
+        if(player.isInMenu)
         {
             animator.SetBool("Walk", false);
             this.enabled = false;

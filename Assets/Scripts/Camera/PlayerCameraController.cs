@@ -41,70 +41,76 @@ public class PlayerCameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        cameraPosition.x = Holder.position.x + offsetX;
-        cameraPosition.y = Holder.position.y + offsetY;
-        cameraPosition.z = Holder.position.z + offsetZ;
-
-        transform.position = Vector3.Lerp(transform.position, cameraPosition, followSpeed * Time.deltaTime);
-
-        if (currDistance < 2)
-            currDistance = 2;
-        
-        var targetPos = Holder.position + new Vector3(0, (distanceHit - 2) / 3f + cameraPos[1], 0);
-
-        currDistance -= Input.GetAxis("Mouse ScrollWheel") * 2;
-        if (currDistance > 5.0f)
-            currDistance = 5.0f;
-        if(currDistance < 3.5f)
-            currDistance = 3.5f;
-
-        if (Holder)
+        if(!GameManager.Instance.player.isInMenu)
         {
-            var pos = Input.mousePosition;
-            float dpiScale = 1;
-
-            if (Screen.dpi < 1)
-                dpiScale = 1;
-            if (Screen.dpi < 200)
-                dpiScale = 1;
-            else
-                dpiScale = Screen.dpi / 200f;
-
-            if (pos.x < 380 * dpiScale && Screen.height - pos.y < 250 * dpiScale)
+            if (GameManager.Instance.player.isInInventory)
                 return;
 
-            x += (float)(Input.GetAxis("Mouse X") * xRotate * 0.02);
-            y -= (float)(Input.GetAxis("Mouse Y") * yRotate * 0.02);
-            y = ClampAngle(y, yMinLimit, yMaxLimit);
+            cameraPosition.x = Holder.position.x + offsetX;
+            cameraPosition.y = Holder.position.y + offsetY;
+            cameraPosition.z = Holder.position.z + offsetZ;
 
-            var rotation = Quaternion.Euler(y, x, 0);
-            var position = rotation * new Vector3(0, 0, -currDistance) + targetPos;
-            transform.position = Vector3.Lerp(transform.position, position, followSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, cameraPosition, followSpeed * Time.deltaTime);
 
-            //If camera collide with collidingLayers move it to this point.
-            if (Physics.Raycast(targetPos, position - targetPos, out hit, (position - targetPos).magnitude, collidingLayers))
+            if (currDistance < 2)
+                currDistance = 2;
+
+            var targetPos = Holder.position + new Vector3(0, (distanceHit - 2) / 3f + cameraPos[1], 0);
+
+            currDistance -= Input.GetAxis("Mouse ScrollWheel") * 2;
+            if (currDistance > 5.0f)
+                currDistance = 5.0f;
+            if (currDistance < 3.5f)
+                currDistance = 3.5f;
+
+            if (Holder)
             {
-                transform.position = hit.point;
-                //Min(4) distance from ground for camera target point
-                distanceHit = Mathf.Clamp(Vector3.Distance(targetPos, hit.point), 4, 600);
+                var pos = Input.mousePosition;
+                float dpiScale = 1;
 
+                if (Screen.dpi < 1)
+                    dpiScale = 1;
+                if (Screen.dpi < 200)
+                    dpiScale = 1;
+                else
+                    dpiScale = Screen.dpi / 200f;
+
+                if (pos.x < 380 * dpiScale && Screen.height - pos.y < 250 * dpiScale)
+                    return;
+
+                x += (float)(Input.GetAxis("Mouse X") * xRotate * 0.02);
+                y -= (float)(Input.GetAxis("Mouse Y") * yRotate * 0.02);
+                y = ClampAngle(y, yMinLimit, yMaxLimit);
+
+                var rotation = Quaternion.Euler(y, x, 0);
+                var position = rotation * new Vector3(0, 0, -currDistance) + targetPos;
+                transform.position = Vector3.Lerp(transform.position, position, followSpeed * Time.deltaTime);
+
+                //If camera collide with collidingLayers move it to this point.
+                if (Physics.Raycast(targetPos, position - targetPos, out hit, (position - targetPos).magnitude, collidingLayers))
+                {
+                    transform.position = hit.point;
+                    //Min(4) distance from ground for camera target point
+                    distanceHit = Mathf.Clamp(Vector3.Distance(targetPos, hit.point), 4, 600);
+
+                }
+                else
+                {
+                    transform.position = position;
+                    distanceHit = currDistance;
+                }
+                transform.rotation = rotation;
             }
-            else
+
+            if (prevDistance != currDistance)
             {
-                transform.position = position;
-                distanceHit = currDistance;
+                prevDistance = currDistance;
+                var rot = Quaternion.Euler(y, x, 0);
+                // (currDistance - 2) / 3.5f - constant for far camera position
+                var po = rot * new Vector3(0, 0, -currDistance) + targetPos;
+                transform.rotation = rot;
+                transform.position = po;
             }
-            transform.rotation = rotation;
-        }
-
-        if (prevDistance != currDistance)
-        {
-            prevDistance = currDistance;
-            var rot = Quaternion.Euler(y, x, 0);
-            // (currDistance - 2) / 3.5f - constant for far camera position
-            var po = rot * new Vector3(0, 0, -currDistance) + targetPos;
-            transform.rotation = rot;
-            transform.position = po;
         }
     }
 
@@ -119,9 +125,20 @@ public class PlayerCameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isCursorVisible)
+        if(GameManager.Instance.player.isInMenu || GameManager.Instance.player.isInInventory)
+        {
+            Cursor.visible = true;
+            Screen.lockCursor = false;
+        } 
+        else
         {
             Cursor.visible = false;
+            Screen.lockCursor = true;
+        }
+
+        /*if (!isCursorVisible)
+        {
+             Cursor.visible = false;
             Screen.lockCursor = true;
         }
         else
@@ -131,6 +148,6 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
-            isCursorVisible = !isCursorVisible;
+            isCursorVisible = !isCursorVisible;*/
     }
 }
