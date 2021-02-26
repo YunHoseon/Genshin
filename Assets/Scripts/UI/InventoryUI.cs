@@ -4,17 +4,36 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
-    public Slot[] slots;
-    public Transform slotHolder;
+    public Slot[] ingredientSlots;
+    public Transform ingredientSlotHolder;
 
     void Start()
     {
-        slots = slotHolder.GetComponentsInChildren<Slot>();
-
+        ingredientSlots = ingredientSlotHolder.GetComponentsInChildren<Slot>();
     }
-    
-    void Update()
+
+    public void AcquireItem(Item _item, int _count)
     {
-        
+        for (int i = 0; i < ingredientSlots.Length; i++)
+        {
+            if (ingredientSlots[i].item != null)
+            {
+                if (ingredientSlots[i].item.ItemName == _item.ItemName)
+                {
+                    ingredientSlots[i].SetSlot(_count);
+                    return;
+                }
+            }
+
+        }
+
+        for (int i = 0; i < ingredientSlots.Length; i++)
+        {
+            if (ingredientSlots[i].item == null)
+            {
+                ingredientSlots[i].AddItem(_item, _count);
+                return;
+            }
+        }
     }
 }

@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
 {
     public PlayerState playerState;
     private Element playerElement;
-    public Inventory playerInventory;
     private PlayerAttack playerAttack;
     public PlayerSkill playerSkill;
 
@@ -34,8 +33,12 @@ public class Player : MonoBehaviour
     public bool isInMenu { get; set; } = false;
     public bool isInInventory { get; set; } = false;
 
+    public GameObject startSword;
     public GameObject ingredientUI;
     public Text txtIngredientName;
+
+    [SerializeField]
+    private InventoryUI[] playerInventory = new InventoryUI[4];
 
     void Awake()
     {
@@ -43,6 +46,11 @@ public class Player : MonoBehaviour
         playerState = PlayerState.None;
         playerAttack = GetComponent<PlayerAttack>();
         playerSkill = GetComponent<PlayerSkill>();
+    }
+
+    void Start()
+    {
+        playerInventory[1].AcquireItem(startSword.GetComponent<Item>(), 1);
     }
 
     void Update()
@@ -97,9 +105,8 @@ public class Player : MonoBehaviour
             playerAttack.weapon.SetActive(true);
             playerAttack.backWeapon.SetActive(false);
         }
-        else if (isInMenu)
+        else if (isInMenu || isInInventory)
         {
-            //GetComponent<PlayerAnimController>().enabled = false;
             GetComponent<PlayerMove>().enabled = false;
             GetComponent<PlayerAttack>().enabled = false;
             GetComponent<PlayerSkill>().enabled = false;
@@ -120,8 +127,9 @@ public class Player : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                Destroy(col.gameObject);
                 ingredientUI.SetActive(false);
+                playerInventory[0].AcquireItem(col.GetComponent<Item>(), 1);
+                col.gameObject.SetActive(false);
             }
         }
     }
@@ -129,8 +137,6 @@ public class Player : MonoBehaviour
     void OnTriggerExit(Collider col)
     {
         if (col.CompareTag("Ingredient"))
-        {
             ingredientUI.SetActive(false);
-        }
     }
 }

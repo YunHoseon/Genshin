@@ -12,7 +12,6 @@ public class CSVReader
 
     public static List<Dictionary<string, object>> Read(string file)
     {
-        Debug.Log("path = " + file);
         var list = new List<Dictionary<string, object>>();
         TextAsset data = Resources.Load(file) as TextAsset;
 
@@ -33,9 +32,6 @@ public class CSVReader
             {
                 string value = values[j];
                 value = value.TrimStart(TRIM_CHARS).TrimEnd(TRIM_CHARS).Replace("\\", "");
-
-                //value = value.Replace("<br>", "\n");
-                //value = value.Replace("<c>", ",");
 
                 object finalvalue = value;
                 int n;

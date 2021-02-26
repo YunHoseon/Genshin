@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 930002740020400667}
   - component: {fileID: 930002740020400666}
-  - component: {fileID: 2045870292}
   m_Layer: 0
   m_Name: Apple
   m_TagString: Ingredient
@@ -46,19 +45,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2045870292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 930002740020400668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e530dd3828c65e41b547f2ad2bcddde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: Apple
 --- !u!1001 &930002740923101825
 PrefabInstance:
   m_ObjectHideFlags: 0

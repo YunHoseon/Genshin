@@ -21,11 +21,24 @@ public class UIManager : MonoBehaviour
     public float EnergyGauge { get; set; }
 
     public GameObject menuUI;
-    public GameObject inventoryUI;
+    public GameObject inventoryWholeUI;
+    public GameObject[] inventoryUI = new GameObject[4];
+    public GameObject[] selectInventoryUI = new GameObject[4];
 
     public GameObject HpBar;
     public GameObject StaminaBar;
     public GameObject SkillUI;
+
+    public int inventoryNum = 0;
+
+    void Start()
+    {
+        for(int i = 0; i < inventoryUI.Length; i++)
+            inventoryUI[i].SetActive(false);
+        for (int i = 0; i < selectInventoryUI.Length; i++)
+            selectInventoryUI[i].SetActive(false);
+        inventoryWholeUI.SetActive(false);
+    }
 
     public void StartGame()
     {
@@ -42,7 +55,7 @@ public class UIManager : MonoBehaviour
     {
         GoToMenu();
 
-        if (GameManager.Instance.player.isInMenu)
+        if (GameManager.Instance.player.isInMenu || GameManager.Instance.player.isInInventory)
         {
             HpBar.SetActive(false);
             StaminaBar.SetActive(false);
@@ -63,7 +76,8 @@ public class UIManager : MonoBehaviour
             if(GameManager.Instance.player.isInInventory)
             {
                 GameManager.Instance.player.isInInventory = false;
-                inventoryUI.SetActive(false);
+                inventoryUI[inventoryNum].SetActive(false);
+                inventoryWholeUI.SetActive(false);
             }
             GameManager.Instance.player.isInMenu = GameManager.Instance.player.isInMenu ? false : true;
             menuUI.SetActive(GameManager.Instance.player.isInMenu);
@@ -82,6 +96,71 @@ public class UIManager : MonoBehaviour
             menuUI.SetActive(false);
         }
         GameManager.Instance.player.isInInventory = GameManager.Instance.player.isInInventory ? false : true;
-        inventoryUI.SetActive(GameManager.Instance.player.isInInventory);
+        inventoryUI[inventoryNum].SetActive(GameManager.Instance.player.isInInventory);
+        selectInventoryUI[inventoryNum].SetActive(true);
+        inventoryWholeUI.SetActive(GameManager.Instance.player.isInInventory);
+    }
+
+    public void ClickWeaponInventory()
+    {
+        inventoryNum = 0;
+        inventoryUI[0].SetActive(true);
+        inventoryUI[1].SetActive(false);
+        inventoryUI[2].SetActive(false);
+        inventoryUI[3].SetActive(false);
+
+        selectInventoryUI[0].SetActive(true);
+        selectInventoryUI[1].SetActive(false);
+        selectInventoryUI[2].SetActive(false);
+        selectInventoryUI[3].SetActive(false);
+    }
+
+    public void ClickArtifactInventory()
+    {
+        inventoryNum = 1;
+        inventoryUI[0].SetActive(false);
+        inventoryUI[1].SetActive(true);
+        inventoryUI[2].SetActive(false);
+        inventoryUI[3].SetActive(false);
+
+        selectInventoryUI[0].SetActive(false);
+        selectInventoryUI[1].SetActive(true);
+        selectInventoryUI[2].SetActive(false);
+        selectInventoryUI[3].SetActive(false);
+    }
+
+    public void ClickIngredientInventory()
+    {
+        inventoryNum = 2;
+        inventoryUI[0].SetActive(false);
+        inventoryUI[1].SetActive(false);
+        inventoryUI[2].SetActive(true);
+        inventoryUI[3].SetActive(false);
+
+        selectInventoryUI[0].SetActive(false);
+        selectInventoryUI[1].SetActive(false);
+        selectInventoryUI[2].SetActive(true);
+        selectInventoryUI[3].SetActive(false);
+    }
+
+    public void ClickNurtureInventory()
+    {
+        inventoryNum = 3;
+        inventoryUI[0].SetActive(false);
+        inventoryUI[1].SetActive(false);
+        inventoryUI[2].SetActive(false);
+        inventoryUI[3].SetActive(true);
+
+        selectInventoryUI[0].SetActive(false);
+        selectInventoryUI[1].SetActive(false);
+        selectInventoryUI[2].SetActive(false);
+        selectInventoryUI[3].SetActive(true);
+    }
+
+    public void QuitInventory()
+    {
+        GameManager.Instance.player.isInInventory = false;
+        inventoryUI[inventoryNum].SetActive(false);
+        inventoryWholeUI.SetActive(false);
     }
 }

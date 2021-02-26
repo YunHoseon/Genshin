@@ -23,6 +23,9 @@ public class PlayerAnimController : MonoBehaviour
 
     void Update()
     {
+        if (player.isInMenu || player.isInInventory)
+            return;
+
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
@@ -31,7 +34,7 @@ public class PlayerAnimController : MonoBehaviour
             if (Input.GetButtonDown("Jump"))
                 isJumping = true;
 
-            if (Input.GetMouseButtonDown(0) && (player.isInMenu && player.isInInventory))
+            if (Input.GetMouseButtonDown(0))
             {
                 isAttacking = true;
                 PlayAttack();
@@ -89,7 +92,10 @@ public class PlayerAnimController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(!isAttacking)
+        if (player.isInMenu || player.isInInventory)
+            return;
+
+        if (!isAttacking)
         {
             PlayWalk(h, v);
             PlayJump();
