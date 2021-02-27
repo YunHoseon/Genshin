@@ -20,7 +20,9 @@ public class Item : MonoBehaviour
     public int Rarity { get; set; } = 0;
     public string Info { get; set; }
     public string ImagePath { get; set; } = null;
-    
+
+    public Sprite ItemStarImage { get; set; }
+
     void Start()
     {
         ItemName = this.gameObject.name;
@@ -53,5 +55,24 @@ public class Item : MonoBehaviour
         Info = ItemDatabase.Instance.itemDB[_id - 1]["Info"] as string;
 
         ItemImage = Resources.Load<Sprite>(ImagePath);
+
+        switch(Rarity)
+        {
+            case 1:
+                ItemStarImage = Resources.Load<Sprite>("Texture/Icon_1_Star");
+                break;
+            case 2:
+                ItemStarImage = Resources.Load<Sprite>("Texture/Icon_2_Stars");
+                break;
+            case 3:
+                ItemStarImage = Resources.Load<Sprite>("Texture/Icon_3_Stars");
+                break;
+            case 4:
+                ItemStarImage = Resources.Load<Sprite>("Texture/Icon_4_Stars");
+                break;
+            case 5:
+                ItemStarImage = Resources.Load<Sprite>("Texture/Icon_5_Stars");
+                break;
+        }
     }
 }

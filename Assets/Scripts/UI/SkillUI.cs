@@ -11,7 +11,7 @@ public class SkillUI : MonoBehaviour
     public Image imgEnergyGauge;
     private Color imgIconColor;
 
-    void Awake()
+    void Start()
     {
         imgGauge.fillAmount = 0;
         imgIconColor = imgIcon.color;
