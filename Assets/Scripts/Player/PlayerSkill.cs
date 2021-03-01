@@ -76,7 +76,7 @@ public class PlayerSkill : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && obj == null)
         {
             obj = Instantiate(palmVortex, transform.position + transform.forward * 1.3f + transform.up * 0.9f, transform.rotation);
-            energyGauge += 50.0f;
+            energyGauge += 60.0f;
             if (energyGauge > maxEnergyGauge)
                 isFullEnergy = true;
         }
