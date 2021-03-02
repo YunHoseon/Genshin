@@ -9,10 +9,10 @@ public class Slot : MonoBehaviour
     public Image imgBackground;
     public Image imgItem;
     public Image imgRarityStar;
-    public int itemCount;
+    public int itemCount = 0;
     public ItemInfoBoard itemInfoBoard;
 
-    private Text txtCount;
+    public Text txtCount;
 
     void Start()
     {
@@ -29,8 +29,9 @@ public class Slot : MonoBehaviour
 
     public void AddItem(Item _item, int _count = 1)
     {
+        //Debug.Log("_count : " + _count);
         item = _item;
-        itemCount = _count;
+        itemCount += _count;
         imgItem.sprite = item.ItemImage;
 
         imgItem.gameObject.SetActive(true);
@@ -56,6 +57,7 @@ public class Slot : MonoBehaviour
 
             ChangeImageColorForRarity(imgBackground);
             imgItem.gameObject.SetActive(true);
+            //this.gameObject.SetActive(true);
         }
     }
 
@@ -93,11 +95,6 @@ public class Slot : MonoBehaviour
 
     public void ClickSlot()
     {
-        itemInfoBoard.item = item;
-
-        itemInfoBoard.txtItemName.text = item.ItemName;
-        ChangeImageColorForRarity(itemInfoBoard.imgBackBoard);
-        itemInfoBoard.imgItem.sprite = item.ItemImage;
-        itemInfoBoard.txtItemInfo.text = item.Info;
+        itemInfoBoard.UpdateInfo(item);
     }
 }

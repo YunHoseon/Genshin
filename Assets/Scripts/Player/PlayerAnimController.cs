@@ -55,7 +55,7 @@ public class PlayerAnimController : MonoBehaviour
             this.enabled = false;
         }
 
-        if(player.playerState == PlayerState.Climbing)
+        if (player.playerState == PlayerState.Climbing)
         {
             animator.SetBool("Climbing", true);
             animator.SetBool("Walk", false);

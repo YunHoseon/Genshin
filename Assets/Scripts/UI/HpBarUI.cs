@@ -18,10 +18,10 @@ public class HpBarUI : MonoBehaviour
     {
         OnOffFillArea();
 
-        txtHp.text = GameManager.Instance.player.playerHp.ToString("N0") + " / " + GameManager.Instance.player.playerMaxHp.ToString("N0");
-        txtLevel.text = "Lv." + GameManager.Instance.player.playerLevel.ToString("N0");
+        txtHp.text = GameManager.Instance.Player.playerHp.ToString("N0") + " / " + GameManager.Instance.Player.playerMaxHp.ToString("N0");
+        txtLevel.text = "Lv." + GameManager.Instance.Player.playerLevel.ToString("N0");
 
-        float ratio = GameManager.Instance.player.playerHp / GameManager.Instance.player.playerMaxHp;
+        float ratio = GameManager.Instance.Player.playerHp / GameManager.Instance.Player.playerMaxHp;
         hpBar.value = ratio;
     }
 

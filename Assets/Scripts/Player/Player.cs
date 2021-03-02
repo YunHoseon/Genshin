@@ -111,6 +111,14 @@ public class Player : MonoBehaviour
             GetComponent<PlayerAttack>().enabled = false;
             GetComponent<PlayerSkill>().enabled = false;
         }
+        else if(!isInMenu && !isInInventory)
+        {
+            if(playerState == PlayerState.Normal_Attack)
+                GetComponent<PlayerAttack>().enabled = true;
+
+            GetComponent<PlayerMove>().enabled = true;
+            GetComponent<PlayerSkill>().enabled = true;
+        }
     }
 
     public void Damaged(float atk)

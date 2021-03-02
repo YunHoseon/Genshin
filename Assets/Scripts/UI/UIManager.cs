@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class UIManager : MonoBehaviour
     public GameObject inventoryWholeUI;
     public GameObject[] inventoryUI = new GameObject[4];
     public GameObject[] selectInventoryUI = new GameObject[4];
+    public Text txtItemKind;
 
     public GameObject HpBar;
     public GameObject StaminaBar;
@@ -55,7 +57,7 @@ public class UIManager : MonoBehaviour
     {
         GoToMenu();
 
-        if (GameManager.Instance.player.isInMenu || GameManager.Instance.player.isInInventory)
+        if (GameManager.Instance.Player.isInMenu || GameManager.Instance.Player.isInInventory)
         {
             HpBar.SetActive(false);
             StaminaBar.SetActive(false);
@@ -73,14 +75,14 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(GameManager.Instance.player.isInInventory)
+            if(GameManager.Instance.Player.isInInventory)
             {
-                GameManager.Instance.player.isInInventory = false;
+                GameManager.Instance.Player.isInInventory = false;
                 inventoryUI[inventoryNum].SetActive(false);
                 inventoryWholeUI.SetActive(false);
             }
-            GameManager.Instance.player.isInMenu = GameManager.Instance.player.isInMenu ? false : true;
-            menuUI.SetActive(GameManager.Instance.player.isInMenu);
+            GameManager.Instance.Player.isInMenu = GameManager.Instance.Player.isInMenu ? false : true;
+            menuUI.SetActive(GameManager.Instance.Player.isInMenu);
         }
         else if (Input.GetKeyDown(KeyCode.B))
         {
@@ -90,15 +92,15 @@ public class UIManager : MonoBehaviour
 
     public void GoToInventory()
     {
-        if(GameManager.Instance.player.isInMenu)
+        if(GameManager.Instance.Player.isInMenu)
         {
-            GameManager.Instance.player.isInMenu = false;
+            GameManager.Instance.Player.isInMenu = false;
             menuUI.SetActive(false);
         }
-        GameManager.Instance.player.isInInventory = GameManager.Instance.player.isInInventory ? false : true;
-        inventoryUI[inventoryNum].SetActive(GameManager.Instance.player.isInInventory);
+        GameManager.Instance.Player.isInInventory = GameManager.Instance.Player.isInInventory ? false : true;
+        inventoryUI[inventoryNum].SetActive(GameManager.Instance.Player.isInInventory);
         selectInventoryUI[inventoryNum].SetActive(true);
-        inventoryWholeUI.SetActive(GameManager.Instance.player.isInInventory);
+        inventoryWholeUI.SetActive(GameManager.Instance.Player.isInInventory);
     }
 
     public void ClickWeaponInventory()
@@ -113,6 +115,7 @@ public class UIManager : MonoBehaviour
         selectInventoryUI[1].SetActive(false);
         selectInventoryUI[2].SetActive(false);
         selectInventoryUI[3].SetActive(false);
+        txtItemKind.text = "장비 아이템";
     }
 
     public void ClickArtifactInventory()
@@ -127,6 +130,7 @@ public class UIManager : MonoBehaviour
         selectInventoryUI[1].SetActive(true);
         selectInventoryUI[2].SetActive(false);
         selectInventoryUI[3].SetActive(false);
+        txtItemKind.text = "성유물 아이템";
     }
 
     public void ClickIngredientInventory()
@@ -141,6 +145,7 @@ public class UIManager : MonoBehaviour
         selectInventoryUI[1].SetActive(false);
         selectInventoryUI[2].SetActive(true);
         selectInventoryUI[3].SetActive(false);
+        txtItemKind.text = "재료 아이템";
     }
 
     public void ClickNurtureInventory()
@@ -155,11 +160,12 @@ public class UIManager : MonoBehaviour
         selectInventoryUI[1].SetActive(false);
         selectInventoryUI[2].SetActive(false);
         selectInventoryUI[3].SetActive(true);
+        txtItemKind.text = "육성 아이템";
     }
 
     public void QuitInventory()
     {
-        GameManager.Instance.player.isInInventory = false;
+        GameManager.Instance.Player.isInInventory = false;
         inventoryUI[inventoryNum].SetActive(false);
         inventoryWholeUI.SetActive(false);
     }

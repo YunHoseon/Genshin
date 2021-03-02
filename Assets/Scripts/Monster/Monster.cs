@@ -110,11 +110,11 @@ public class Monster : MonoBehaviour
         }
         if (col.CompareTag("PalmVortex"))
         {
-
+            //코루틴(일정시간마다 대미지)
         }
         if (col.CompareTag("GustSurge"))
         {
-
+            //코루틴(일정시간마다 대미지)
         }
     }
 
@@ -126,7 +126,7 @@ public class Monster : MonoBehaviour
     IEnumerator AttackTimer()
     {
         attackCollider.SetActive(true);
-        GameManager.Instance.player.Damaged(monsterAtk);
+        GameManager.Instance.Player.Damaged(monsterAtk);
         yield return new WaitForSeconds(0.5f);
         
         attackCollider.SetActive(false);

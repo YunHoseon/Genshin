@@ -54,7 +54,7 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
             isJumping = true;
 
-        if (Input.GetMouseButtonDown(0) && (player.isInMenu && player.isInInventory))
+        if (Input.GetMouseButtonDown(0) && !(player.isInMenu || player.isInInventory))
         {
             player.playerState = PlayerState.Normal_Attack;
             playerAnimController.isAttacking = true;

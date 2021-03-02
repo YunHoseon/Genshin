@@ -43,9 +43,25 @@ public class GameManager : MonoBehaviour
     public void SetIsExitGame(bool _isExitGame) { isExitGame = _isExitGame; }
 
     public GameObject PlayerObject { get; set; }
-    public Player player { get; set; }
+    private Player player;
+    public Player Player {
+        get
+        {
+            if(player == null)
+            {
+                PlayerObject = GameObject.Find("Player");
+                if (PlayerObject != null)
+                    player = PlayerObject.GetComponent<Player>();
+            }
+            return this.player;
+        }
+        set
+        {
+            this.player = value;
+        }
+    }
 
-    void OnGUI()
+    void Update()
     {
         if (sceneID == 0)      //start scene
         {

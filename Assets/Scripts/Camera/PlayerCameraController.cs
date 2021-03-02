@@ -41,16 +41,16 @@ public class PlayerCameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        if(!GameManager.Instance.player.isInMenu)
+        if(!GameManager.Instance.Player.isInMenu)
         {
-            if (GameManager.Instance.player.isInInventory)
+            if (GameManager.Instance.Player.isInInventory)
                 return;
 
-            cameraPosition.x = Holder.position.x + offsetX;
-            cameraPosition.y = Holder.position.y + offsetY;
-            cameraPosition.z = Holder.position.z + offsetZ;
+            //cameraPosition.x = Holder.position.x + offsetX;
+            //cameraPosition.y = Holder.position.y + offsetY;
+            //cameraPosition.z = Holder.position.z + offsetZ;
 
-            transform.position = Vector3.Lerp(transform.position, cameraPosition, followSpeed * Time.deltaTime);
+            //transform.position = Vector3.Lerp(transform.position, cameraPosition, followSpeed * Time.deltaTime);
 
             if (currDistance < 2)
                 currDistance = 2;
@@ -58,8 +58,8 @@ public class PlayerCameraController : MonoBehaviour
             var targetPos = Holder.position + new Vector3(0, (distanceHit - 2) / 3f + cameraPos[1], 0);
 
             currDistance -= Input.GetAxis("Mouse ScrollWheel") * 2;
-            if (currDistance > 5.0f)
-                currDistance = 5.0f;
+            if (currDistance > 6.0f)
+                currDistance = 6.0f;
             if (currDistance < 3.5f)
                 currDistance = 3.5f;
 
@@ -92,7 +92,6 @@ public class PlayerCameraController : MonoBehaviour
                     transform.position = hit.point;
                     //Min(4) distance from ground for camera target point
                     distanceHit = Mathf.Clamp(Vector3.Distance(targetPos, hit.point), 4, 600);
-
                 }
                 else
                 {
@@ -125,7 +124,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(GameManager.Instance.player.isInMenu || GameManager.Instance.player.isInInventory)
+        if(GameManager.Instance.Player.isInMenu || GameManager.Instance.Player.isInInventory)
         {
             Cursor.visible = true;
             Screen.lockCursor = false;
@@ -135,19 +134,5 @@ public class PlayerCameraController : MonoBehaviour
             Cursor.visible = false;
             Screen.lockCursor = true;
         }
-
-        /*if (!isCursorVisible)
-        {
-             Cursor.visible = false;
-            Screen.lockCursor = true;
-        }
-        else
-        {
-            Cursor.visible = true;
-            Screen.lockCursor = false;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-            isCursorVisible = !isCursorVisible;*/
     }
 }
