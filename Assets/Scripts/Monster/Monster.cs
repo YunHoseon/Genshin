@@ -9,6 +9,7 @@ public enum MonsterState
     Moving,
     Attaking,
     Damaged,
+    Return,
     Die,
     InMenu
 }
@@ -26,21 +27,40 @@ public class Monster : MonoBehaviour
     private GameObject player;
     private GameObject attackCollider;
 
-    private float findDistance = 2.0f;
+    private Vector3 originPos;
+
+    private float moveSpeed = 2.0f;
+    private float findDistance = 3.0f;
+    private float attackDistance = 1.5f;
+    private float moveDistance = 10.0f;
 
     private int monsterLevel = 1;
     private float monsterMaxHp = 30.0f;
     private float monsterHp;
+    public float MonsterHp
+    {
+        get
+        {
+            return this.monsterHp;
+        }
+        set
+        {
+            this.monsterHp = value;
+        }
+    }
     private float monsterAtk = 10.0f;
     private float monsterGrd = 5.0f;
 
     private bool isInMenu = false;
-
+    private bool isAttacked = false;
+    public Vector3 offset;      // for gustSurge
+    
     void Awake()
     {
         monsterHp = monsterMaxHp;
         monsterState = MonsterState.Idle;
         animator = GetComponentInChildren<Animator>();
+        originPos = this.transform.position;
     }
 
     void Start()
@@ -69,11 +89,16 @@ public class Monster : MonoBehaviour
                 Idle();
                 break;
             case MonsterState.Moving:
+                Moving();
                 break;
             case MonsterState.Attaking:
                 Attack();
                 break;
             case MonsterState.Damaged:
+                Damaged();
+                break;
+            case MonsterState.Return:
+                Return();
                 break;
             case MonsterState.Die:
                 break;
@@ -84,37 +109,61 @@ public class Monster : MonoBehaviour
     {
         if (Vector3.Distance(player.transform.position, transform.position) < findDistance)
         {
+            animator.SetBool("Move", true);
+            monsterState = MonsterState.Moving;
+        }
+    }
+
+    void Moving()
+    {
+        if (Vector3.Distance(transform.position, originPos) > moveDistance)
+        {
+            monsterState = MonsterState.Return;
+        }
+
+        if (Vector3.Distance(transform.position, originPos) > attackDistance)
+        {
+            Vector3 dir = (player.transform.position - transform.position).normalized;
+            this.gameObject.GetComponent<Rigidbody>().MovePosition(dir * moveSpeed * Time.deltaTime);
+        }
+        else
+        {
+            animator.SetBool("Move", false);
+            //animator.SetBool("Attack", true);
             monsterState = MonsterState.Attaking;
-            animator.SetBool("Attack", true);
         }
     }
 
     void Attack()
     {
-        if (Vector3.Distance(player.transform.position, transform.position) < findDistance)
+        if (Vector3.Distance(player.transform.position, transform.position) < attackDistance)
         {
             animator.SetBool("Attack", true);
         }
         else
         {
-            monsterState = MonsterState.Idle;
             animator.SetBool("Attack", false);
+            animator.SetBool("Move", true);
+            monsterState = MonsterState.Moving;
         }
     }
 
-    void OnTriggerEnter(Collider col)
+    void Damaged()
     {
-        if(col.CompareTag("Weapon"))
+
+    }
+
+    void Return()
+    {
+        if (Vector3.Distance(transform.position, originPos) > 0.1f)
         {
-            monsterHp -= 10;
+            Vector3 dir = (originPos - transform.position).normalized;
+            this.gameObject.GetComponent<Rigidbody>().MovePosition(dir * moveSpeed * Time.deltaTime);
         }
-        if (col.CompareTag("PalmVortex"))
+        else
         {
-            //코루틴(일정시간마다 대미지)
-        }
-        if (col.CompareTag("GustSurge"))
-        {
-            //코루틴(일정시간마다 대미지)
+            transform.position = originPos;
+            monsterState = MonsterState.Idle;
         }
     }
 
@@ -138,5 +187,20 @@ public class Monster : MonoBehaviour
             fillArea.SetActive(false);
         else
             fillArea.SetActive(true);
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.CompareTag("Weapon") && !isAttacked)
+        {
+            monsterHp -= 10;
+            isAttacked = true;
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        if (col.CompareTag("Weapon"))
+            isAttacked = false;
     }
 }

@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     public float playerMaxHp = 912;
     private float playerAtk;
     private float playerGrd;
+    private int maxExp;
     public float PlayerStamina { get; set; }
     public float PlayerMaxStamina { get; set; } = 100.0f;
 

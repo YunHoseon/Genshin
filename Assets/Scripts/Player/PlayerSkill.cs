@@ -76,7 +76,7 @@ public class PlayerSkill : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && obj == null)
         {
             obj = Instantiate(palmVortex, transform.position + transform.forward * 1.3f + transform.up * 0.9f, transform.rotation);
-            energyGauge += 60.0f;
+            energyGauge += 120.0f;
             if (energyGauge > maxEnergyGauge)
                 isFullEnergy = true;
         }
@@ -101,7 +101,7 @@ public class PlayerSkill : MonoBehaviour
             isActiveGustSurge = false;
             isFullEnergy = false;
             energyGauge = 0.0f;
-            Invoke("InitGustSurge", 6f);
+            Invoke("InitGustSurge", 5f);
         }
     }
 
