@@ -29,7 +29,7 @@ public class PalmVortex : MonoBehaviour
             monster.MonsterHp -= _damage;
             if (monster.MonsterHp < 0)
                 break;
-            Debug.Log(monster.MonsterHp);
+            //Debug.Log(monster.MonsterHp);
             yield return new WaitForSeconds(_time);
         }
     }

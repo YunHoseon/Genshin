@@ -24,10 +24,36 @@ public class Player : MonoBehaviour
 
     public int playerLevel { get; set; } = 1;
     public float playerHp { get; set; }
-    public float playerMaxHp = 912;
+    public float playerMaxHp;
     private float playerAtk;
+    public float PlayerAtk
+    {
+        get
+        {
+            return this.playerAtk;
+        }
+    }
     private float playerGrd;
-    private int maxExp;
+    public float PlayerGrd
+    {
+        get
+        {
+            return this.playerGrd;
+        }
+    }
+    private float playerExp = 0;
+    public float PlayerExp
+    {
+        get
+        {
+            return this.playerExp;
+        }
+        set
+        {
+            playerExp = value;
+        }
+    }
+    private float playerMaxExp;
     public float PlayerStamina { get; set; }
     public float PlayerMaxStamina { get; set; } = 100.0f;
 
@@ -43,6 +69,7 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        SetData();
         playerHp = playerMaxHp;
         playerState = PlayerState.None;
         playerAttack = GetComponent<PlayerAttack>();
@@ -56,9 +83,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("playerExp : " + playerExp);
         OnOffPlayerScript();
+        LevelUp();
 
-        if(playerState != PlayerState.Running)
+        if (playerState != PlayerState.Running)
         {
             if(PlayerStamina < PlayerMaxStamina)
             {
@@ -67,6 +96,14 @@ public class Player : MonoBehaviour
                     PlayerStamina = PlayerMaxStamina;
             }
         }
+    }
+
+    void SetData()
+    {
+        playerMaxHp = float.Parse(PlayerStatDatabase.PsInstance.playerStatusDB[playerLevel - 1]["MaxHp"].ToString());
+        playerAtk = float.Parse(PlayerStatDatabase.PsInstance.playerStatusDB[playerLevel - 1]["Atk"].ToString());
+        playerGrd = float.Parse(PlayerStatDatabase.PsInstance.playerStatusDB[playerLevel - 1]["Grd"].ToString());
+        playerMaxExp = float.Parse(PlayerStatDatabase.PsInstance.playerStatusDB[playerLevel - 1]["MaxExp"].ToString());
     }
 
     void OnOffPlayerScript()
@@ -122,9 +159,20 @@ public class Player : MonoBehaviour
         }
     }
 
+    void LevelUp()
+    {
+        if(playerExp >= playerMaxExp)
+        {
+            playerExp = playerExp - playerMaxExp;
+            playerLevel += 1;
+            SetData();
+            playerHp = playerMaxHp;
+        }
+    }
+
     public void Damaged(float atk)
     {
-        playerHp -= atk;
+        playerHp -= atk  * (100 / 100 + playerGrd);
     }
 
     void OnTriggerStay(Collider col)

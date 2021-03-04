@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class ItemDatabase : MonoBehaviour
 {
-    private static ItemDatabase instance =  null;
+    private static ItemDatabase itemDBInstance =  null;
 
-    public static ItemDatabase Instance
+    public static ItemDatabase ItemDBInstance
     {
         get
         {
-            if (instance == null)
+            if (itemDBInstance == null)
             {
                 GameObject newGameObject = new GameObject("_ItemDatabase");
-                instance = newGameObject.AddComponent<ItemDatabase>();
+                itemDBInstance = newGameObject.AddComponent<ItemDatabase>();
             }
-            return instance;
+            return itemDBInstance;
         }
     }
 
     public List<Dictionary<string, object>> itemDB;
+
     private void Awake()
     {
         itemDB = CSVReader.Read("Datas/ItemData");

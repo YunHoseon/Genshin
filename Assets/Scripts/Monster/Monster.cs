@@ -35,7 +35,7 @@ public class Monster : MonoBehaviour
     private float moveDistance = 10.0f;
 
     private int monsterLevel = 1;
-    private float monsterMaxHp = 30.0f;
+    private float monsterMaxHp = 50.0f;
     private float monsterHp;
     public float MonsterHp
     {
@@ -48,8 +48,8 @@ public class Monster : MonoBehaviour
             this.monsterHp = value;
         }
     }
-    private float monsterAtk = 10.0f;
-    private float monsterGrd = 5.0f;
+    private float monsterAtk = 20.0f;
+    private float monsterGrd = 20.0f;
 
     private bool isInMenu = false;
     private bool isAttacked = false;
@@ -78,10 +78,7 @@ public class Monster : MonoBehaviour
         hpBar.value = ratio;
 
         if (monsterHp <= 0)
-        {
             monsterState = MonsterState.Die;
-            Destroy(this.gameObject, 0.1f);
-        }
 
         switch (monsterState)
         {
@@ -101,6 +98,8 @@ public class Monster : MonoBehaviour
                 Return();
                 break;
             case MonsterState.Die:
+                GameManager.Instance.Player.PlayerExp += 50;
+                Destroy(this.gameObject, 0.01f);
                 break;
         }
     }
@@ -191,16 +190,9 @@ public class Monster : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.CompareTag("Weapon") && !isAttacked)
-        {
-            monsterHp -= 10;
-            isAttacked = true;
-        }
-    }
-
-    void OnTriggerExit(Collider col)
-    {
         if (col.CompareTag("Weapon"))
-            isAttacked = false;
+        {
+            monsterHp -= GameManager.Instance.Player.PlayerAtk * (100 / (100 + monsterGrd));
+        }
     }
 }

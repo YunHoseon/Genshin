@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
     public bool IsFullEnergy { get; set; }
     public float EnergyGauge { get; set; }
 
+    /* inventory */
+
     public GameObject menuUI;
     public GameObject inventoryWholeUI;
     public GameObject[] inventoryUI = new GameObject[4];
@@ -32,6 +34,12 @@ public class UIManager : MonoBehaviour
     public GameObject SkillUI;
 
     public int inventoryNum = 0;
+
+    /* Character */
+    public GameObject Map;
+    public GameObject GameObjects;
+    public GameObject MenuObjects;
+
 
     void Start()
     {

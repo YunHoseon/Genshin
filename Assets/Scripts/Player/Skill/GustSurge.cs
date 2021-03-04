@@ -33,7 +33,7 @@ public class GustSurge : MonoBehaviour
                 if (monsters[i] == monster)
                     return;
             }
-            Debug.Log(col.name);
+            //Debug.Log(col.name);
             monsters.Add(monster);
             monster.offset = this.transform.position - monster.transform.position;
             StartCoroutine(TickDamage(monster, 0.8f, 7.0f));
@@ -47,7 +47,7 @@ public class GustSurge : MonoBehaviour
             monster.MonsterHp -= _damage;
             if (monster.MonsterHp < 0)
                 break;
-            Debug.Log(monster.MonsterHp);
+            //Debug.Log(monster.MonsterHp);
             yield return new WaitForSeconds(_time);
         }
     }

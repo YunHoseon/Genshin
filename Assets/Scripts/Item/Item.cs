@@ -37,9 +37,9 @@ public class Item : MonoBehaviour
 
     void SetData(string _name)
     {
-        for(int i = 0; i < ItemDatabase.Instance.itemDB.Count; i++)
+        for(int i = 0; i < ItemDatabase.ItemDBInstance.itemDB.Count; i++)
         {
-            if (_name == ItemDatabase.Instance.itemDB[i]["ItemName"] as string)
+            if (_name == ItemDatabase.ItemDBInstance.itemDB[i]["ItemName"] as string)
             {
                 ItemID = i + 1;
                 break;
@@ -49,10 +49,10 @@ public class Item : MonoBehaviour
 
     public void SetData(int _id)
     {
-        itemKind = (ItemKind)Enum.Parse(typeof(ItemKind), ItemDatabase.Instance.itemDB[_id - 1]["ItemKind"].ToString());
-        Rarity = (int)ItemDatabase.Instance.itemDB[_id - 1]["Rarity"];
-        ImagePath = ItemDatabase.Instance.itemDB[_id - 1]["Path"] as string;
-        Info = ItemDatabase.Instance.itemDB[_id - 1]["Info"] as string;
+        itemKind = (ItemKind)Enum.Parse(typeof(ItemKind), ItemDatabase.ItemDBInstance.itemDB[_id - 1]["ItemKind"].ToString());
+        Rarity = (int)ItemDatabase.ItemDBInstance.itemDB[_id - 1]["Rarity"];
+        ImagePath = ItemDatabase.ItemDBInstance.itemDB[_id - 1]["Path"] as string;
+        Info = ItemDatabase.ItemDBInstance.itemDB[_id - 1]["Info"] as string;
 
         ItemImage = Resources.Load<Sprite>(ImagePath);
 
