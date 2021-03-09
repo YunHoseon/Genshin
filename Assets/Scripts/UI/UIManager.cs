@@ -29,17 +29,15 @@ public class UIManager : MonoBehaviour
     public GameObject[] selectInventoryUI = new GameObject[4];
     public Text txtItemKind;
 
-    public GameObject HpBar;
-    public GameObject StaminaBar;
-    public GameObject SkillUI;
-
     public int inventoryNum = 0;
 
     /* Character */
     public GameObject Map;
     public GameObject GameObjects;
+    public GameObject InGameUI;
     public GameObject MenuObjects;
 
+    public GameObject CharacterUI;
 
     void Start()
     {
@@ -65,17 +63,14 @@ public class UIManager : MonoBehaviour
     {
         GoToMenu();
 
-        if (GameManager.Instance.Player.isInMenu || GameManager.Instance.Player.isInInventory)
+        if (GameManager.Instance.Player.isInMenu || GameManager.Instance.Player.isInInventory ||
+            GameManager.Instance.Player.isInCharacter)
         {
-            HpBar.SetActive(false);
-            StaminaBar.SetActive(false);
-            SkillUI.SetActive(false);
+            InGameUI.SetActive(false);
         }
         else
         {
-            HpBar.SetActive(true);
-            StaminaBar.SetActive(true);
-            SkillUI.SetActive(true);
+            InGameUI.SetActive(true);
         }
     }
 
@@ -89,6 +84,16 @@ public class UIManager : MonoBehaviour
                 inventoryUI[inventoryNum].SetActive(false);
                 inventoryWholeUI.SetActive(false);
             }
+            else if(GameManager.Instance.Player.isInCharacter)
+            {
+                GameManager.Instance.Player.isInCharacter = false;
+                CharacterUI.SetActive(false);
+
+                Map.SetActive(true);
+                GameObjects.SetActive(true);
+                InGameUI.SetActive(true);
+                MenuObjects.SetActive(true);
+            }
             GameManager.Instance.Player.isInMenu = GameManager.Instance.Player.isInMenu ? false : true;
             menuUI.SetActive(GameManager.Instance.Player.isInMenu);
         }
@@ -96,11 +101,23 @@ public class UIManager : MonoBehaviour
         {
             GoToInventory();
         }
+        else if(Input.GetKeyDown(KeyCode.C))
+        {
+            if(!GameManager.Instance.Player.isInCharacter)
+                GoToCharacter();
+            else
+            {
+                QuitCharacter();
+            }
+        }
     }
 
     public void GoToInventory()
     {
-        if(GameManager.Instance.Player.isInMenu)
+        if (GameManager.Instance.Player.isInCharacter)
+            return;
+
+        if (GameManager.Instance.Player.isInMenu)
         {
             GameManager.Instance.Player.isInMenu = false;
             menuUI.SetActive(false);
@@ -109,6 +126,21 @@ public class UIManager : MonoBehaviour
         inventoryUI[inventoryNum].SetActive(GameManager.Instance.Player.isInInventory);
         selectInventoryUI[inventoryNum].SetActive(true);
         inventoryWholeUI.SetActive(GameManager.Instance.Player.isInInventory);
+    }
+
+    public void GoToCharacter()
+    {
+        if (GameManager.Instance.Player.isInInventory)
+            return;
+
+        menuUI.SetActive(false);
+        GameManager.Instance.Player.isInCharacter = GameManager.Instance.Player.isInCharacter ? false : true;
+        CharacterUI.SetActive(GameManager.Instance.Player.isInCharacter);
+
+        Map.SetActive(false);
+        GameObjects.SetActive(false);
+        InGameUI.SetActive(false);
+        MenuObjects.SetActive(false);
     }
 
     public void ClickWeaponInventory()
@@ -176,5 +208,21 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.Player.isInInventory = false;
         inventoryUI[inventoryNum].SetActive(false);
         inventoryWholeUI.SetActive(false);
+    }
+
+    public void QuitCharacter()
+    {
+        GameManager.Instance.Player.isInCharacter = false;
+        CharacterUI.SetActive(false);
+
+        Map.SetActive(true);
+        GameObjects.SetActive(true);
+        InGameUI.SetActive(true);
+        MenuObjects.SetActive(true);
+
+        if(GameManager.Instance.Player.isInMenu)
+            menuUI.SetActive(true);
+        else
+            menuUI.SetActive(false);
     }
 }

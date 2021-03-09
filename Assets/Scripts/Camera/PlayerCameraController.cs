@@ -45,6 +45,8 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (GameManager.Instance.Player.isInInventory)
                 return;
+            if (GameManager.Instance.Player.isInCharacter)
+                return;
 
             //cameraPosition.x = Holder.position.x + offsetX;
             //cameraPosition.y = Holder.position.y + offsetY;
@@ -124,7 +126,8 @@ public class PlayerCameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(GameManager.Instance.Player.isInMenu || GameManager.Instance.Player.isInInventory)
+        if(GameManager.Instance.Player.isInMenu || GameManager.Instance.Player.isInInventory ||
+           GameManager.Instance.Player.isInCharacter)
         {
             Cursor.visible = true;
             Screen.lockCursor = false;

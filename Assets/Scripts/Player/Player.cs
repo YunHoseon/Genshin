@@ -54,11 +54,19 @@ public class Player : MonoBehaviour
         }
     }
     private float playerMaxExp;
+    public float PlayerMaxExp
+    {
+        get
+        {
+            return this.playerMaxExp;
+        }
+    }
     public float PlayerStamina { get; set; }
     public float PlayerMaxStamina { get; set; } = 100.0f;
 
-    public bool isInMenu { get; set; } = false;
-    public bool isInInventory { get; set; } = false;
+    public bool isInMenu = false;
+    public bool isInInventory = false;
+    public bool isInCharacter = false;
 
     public GameObject startSword;
     public GameObject ingredientUI;
@@ -143,13 +151,13 @@ public class Player : MonoBehaviour
             playerAttack.weapon.SetActive(true);
             playerAttack.backWeapon.SetActive(false);
         }
-        else if (isInMenu || isInInventory)
+        else if (isInMenu || isInInventory || isInCharacter)
         {
             GetComponent<PlayerMove>().enabled = false;
             GetComponent<PlayerAttack>().enabled = false;
             GetComponent<PlayerSkill>().enabled = false;
         }
-        else if(!isInMenu && !isInInventory)
+        else if(!isInMenu && !isInInventory && !isInCharacter)
         {
             if(playerState == PlayerState.Normal_Attack)
                 GetComponent<PlayerAttack>().enabled = true;

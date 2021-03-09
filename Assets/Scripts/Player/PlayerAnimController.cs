@@ -23,9 +23,12 @@ public class PlayerAnimController : MonoBehaviour
 
     void Update()
     {
-        if (player.isInMenu || player.isInInventory)
+        if (player.isInMenu || player.isInInventory || player.isInCharacter)
+        {
+            animator.SetBool("Walk", false);
             return;
-
+        }
+            
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
@@ -92,7 +95,7 @@ public class PlayerAnimController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (player.isInMenu || player.isInInventory)
+        if (player.isInMenu || player.isInInventory || player.isInCharacter)
             return;
 
         if (!isAttacking)
