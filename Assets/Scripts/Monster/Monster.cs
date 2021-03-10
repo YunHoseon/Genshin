@@ -102,6 +102,8 @@ public class Monster : MonoBehaviour
                 Destroy(this.gameObject, 0.01f);
                 break;
         }
+
+        Debug.Log("dist : " + Vector3.Distance(player.transform.position, transform.position));
     }
 
     void Idle()
@@ -122,13 +124,16 @@ public class Monster : MonoBehaviour
 
         if (Vector3.Distance(transform.position, originPos) > attackDistance)
         {
-            Vector3 dir = (player.transform.position - transform.position).normalized;
-            this.gameObject.GetComponent<Rigidbody>().MovePosition(dir * moveSpeed * Time.deltaTime);
+            //Vector3 dir = (player.transform.position - transform.position).normalized;
+            //this.gameObject.GetComponent<Rigidbody>().MovePosition(dir * moveSpeed * Time.deltaTime);
+            Debug.Log("쫒는다");
+            this.transform.LookAt(player.transform);
+            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         }
         else
         {
             animator.SetBool("Move", false);
-            //animator.SetBool("Attack", true);
+            animator.SetBool("Attack", true);
             monsterState = MonsterState.Attaking;
         }
     }
