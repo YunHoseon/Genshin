@@ -72,6 +72,9 @@ public class Player : MonoBehaviour
     public GameObject ingredientUI;
     public Text txtIngredientName;
 
+    public Transform ParentDamageText;
+    public GameObject DamageText;
+
     [SerializeField]
     private InventoryUI[] playerInventory = new InventoryUI[4];
 
@@ -91,7 +94,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("playerExp : " + playerExp);
+        //Debug.Log("playerExp : " + playerExp);
         OnOffPlayerScript();
         LevelUp();
 
@@ -180,7 +183,12 @@ public class Player : MonoBehaviour
 
     public void Damaged(float atk)
     {
-        playerHp -= atk  * (100 / 100 + playerGrd);
+        GameObject damageText = Instantiate(DamageText,
+                    transform.position + new Vector3(Random.Range(-1.0f, 1.0f), 1, 0), Quaternion.identity);
+        damageText.transform.parent = ParentDamageText;
+        damageText.GetComponent<Text>().text = ((int)(atk * (100 / (100 + playerGrd)))).ToString("N0");
+
+        playerHp -= (int)(atk  * (100 / (100 + playerGrd)));
     }
 
     void OnTriggerStay(Collider col)
