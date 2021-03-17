@@ -73,7 +73,9 @@ crashlytics-build.properties
 *.jpg
 *.png
 *.mp3
+*.unity
 Assets/01_Download Asset
 Assets/Resources
 Assets/Anims
 Assets/Characters
+Assets/Scenes
