@@ -6,12 +6,12 @@ public class MonsterSpawner : MonoBehaviour
 {
     public GameObject[] Monsters = new GameObject[3];
 
-    [SerializeField]
-    private ParticleSystem effect;
+    //[SerializeField]
+    //private ParticleSystem effect;
 
     public void OnQuestClear()
     {
-        effect.Play();
+        //effect.Play();
        for (int i = 0; i < Monsters.Length; i++)
             Monsters[i].SetActive(true);
     }

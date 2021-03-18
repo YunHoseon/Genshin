@@ -102,6 +102,8 @@ public class Player : MonoBehaviour
         isClearedControlTutorial[1] = 0;
         isClearedControlTutorial[2] = 0;
         isClearedControlTutorial[3] = 0;
+
+        //DamageText.transform.localScale = new Vector3(2, 2, 2);
     }
 
     void Update()

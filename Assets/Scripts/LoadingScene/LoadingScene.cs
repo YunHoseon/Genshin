@@ -2,25 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LoadingScene : MonoBehaviour
 {
     AsyncOperation async;
+    public Slider progressBar;
+
+    private float randomTime = 0;
 
     void Start()
     {
         GameManager.Instance.SetSceneID(1);
-        StartCoroutine(LoadingNextScene(2));
+        //StartCoroutine(LoadingNextScene(2));
     }
 
     void Update()
     {
-        DelayTime();
+        if(progressBar.value >= 1.0f)
+        {
+            SceneManager.LoadScene(2);
+        }
+        randomTime += Time.deltaTime;
+
+        if (randomTime >= Random.Range(3.0f, 10.0f))
+        {
+            progressBar.value += 0.01f;
+        }
+        //DelayTime();
     }
 
-    float delayTime = 0.0f;
+    /*float delayTime = 0.0f;
     void DelayTime()
     {
+        progressBar.value = async.progress;
         if (async.progress >= 0.9f)
         {
             delayTime += Time.deltaTime;
@@ -41,5 +56,5 @@ public class LoadingScene : MonoBehaviour
             //do something
             yield return true;
         }
-    }
+    }*/
 }

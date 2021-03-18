@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -52,6 +53,13 @@ public class UIManager : MonoBehaviour
     public Text txtContent;
     public Text txtClear;
 
+    public AudioSource AttackAudio;
+    public AudioSource DamagedAudio;
+    public AudioSource OKAudio;
+    public AudioSource QuitAudio;
+    public AudioSource SwitchAudio;
+    public AudioSource CompleteAudio;
+
     void Start()
     {
         for(int i = 0; i < inventoryUI.Length; i++)
@@ -59,11 +67,6 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < selectInventoryUI.Length; i++)
             selectInventoryUI[i].SetActive(false);
         inventoryWholeUI.SetActive(false);
-    }
-
-    public void StartGame()
-    {
-        GameManager.Instance.SetIsStart(true);
     }
 
     public void GoToStartScene()
@@ -294,5 +297,45 @@ public class UIManager : MonoBehaviour
         isClearQuest1 = true;
 
         Invoke("ToNextQuest", 3.0f);
+    }
+
+    public void ToLoadingScene()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void PlayQuitSound()
+    {
+        QuitAudio.Play();
+    }
+
+    public void PlayAttackSound()
+    {
+        AttackAudio.Play();
+    }
+
+    public void PlayDamagedSound()
+    {
+        DamagedAudio.Play();
+    }
+
+    public void PlayOKSound()
+    {
+        OKAudio.Play();
+    }
+
+    public void PlaySwitchSound()
+    {
+        SwitchAudio.Play();
+    }
+
+    public void PlayCompleteSound()
+    {
+        CompleteAudio.Play();
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

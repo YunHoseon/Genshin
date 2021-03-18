@@ -43,6 +43,7 @@ public class PlayerAnimController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 isAttacking = true;
+                UIManager.Instance.PlayAttackSound();
                 PlayAttack();
             }
 

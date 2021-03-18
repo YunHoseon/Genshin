@@ -161,6 +161,7 @@ public class Monster : MonoBehaviour
     void Damaged()
     {
         StartCoroutine(DamageProcess());
+        //UIManager.Instance.PlayDamagedSound();
     }
 
     IEnumerator DamageProcess()
@@ -228,6 +229,7 @@ public class Monster : MonoBehaviour
                 damageText.transform.parent = ParentDamageText;
                 damageText.GetComponent<Text>().text = (GameManager.Instance.Player.PlayerAtk * (100 / (100 + monsterGrd))).ToString("N0");
                 damagedEffect.Play();
+                UIManager.Instance.PlayDamagedSound();
 
                 animator.SetTrigger("Damaged");
                 monsterState = MonsterState.Damaged;
