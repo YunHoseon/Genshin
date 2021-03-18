@@ -14,6 +14,9 @@ public class PlayerAnimController : MonoBehaviour
     private bool isJumping = false;
     public bool isAttacking = false;
 
+    [SerializeField]
+    private ParticleSystem slash;
+
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -122,6 +125,7 @@ public class PlayerAnimController : MonoBehaviour
     void PlayAttack()
     {
         animator.SetTrigger("Slash");
+        slash.Play();
         //rigidbody.MovePosition(transform.position + transform.forward * 0.8f);
     }
 

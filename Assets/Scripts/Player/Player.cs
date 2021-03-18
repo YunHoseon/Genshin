@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public enum PlayerState
 {
@@ -21,6 +22,10 @@ public class Player : MonoBehaviour
     private Element playerElement;
     private PlayerAttack playerAttack;
     public PlayerSkill playerSkill;
+
+    public int[] isClearedControlTutorial = new int[4];
+    private float currDistance = 5.0f;
+    private float h, v;
 
     public int playerLevel { get; set; } = 1;
     public float playerHp { get; set; }
@@ -78,6 +83,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private InventoryUI[] playerInventory = new InventoryUI[4];
 
+    public UnityEvent OnQuestClear;
+
     void Awake()
     {
         SetData();
@@ -90,6 +97,11 @@ public class Player : MonoBehaviour
     void Start()
     {
         playerInventory[1].AcquireItem(startSword.GetComponent<Item>(), 1);
+
+        isClearedControlTutorial[0] = 1;
+        isClearedControlTutorial[1] = 0;
+        isClearedControlTutorial[2] = 0;
+        isClearedControlTutorial[3] = 0;
     }
 
     void Update()
@@ -106,6 +118,38 @@ public class Player : MonoBehaviour
                 if(PlayerStamina > PlayerMaxStamina)
                     PlayerStamina = PlayerMaxStamina;
             }
+        }
+        
+        if(isClearedControlTutorial[3] != 2)
+        {
+            h = Input.GetAxisRaw("Horizontal");
+            v = Input.GetAxisRaw("Vertical");
+            InputPlayer();
+        }
+    }
+
+    void InputPlayer()
+    {
+        currDistance -= Input.GetAxis("Mouse ScrollWheel") * 10;
+
+        if (currDistance != 5 && isClearedControlTutorial[0] == 1)
+        {
+            isClearedControlTutorial[0] = 0;
+            isClearedControlTutorial[1] = 1;
+        }
+        else if((h != 0 || v != 0) && isClearedControlTutorial[1] == 1)
+        {
+            isClearedControlTutorial[1] = 0;
+            isClearedControlTutorial[2] = 1;
+        }
+        else if (Input.GetMouseButtonDown(1) && isClearedControlTutorial[2] == 1)
+        {
+            isClearedControlTutorial[2] = 0;
+            isClearedControlTutorial[3] = 1;
+        }
+        else if(Input.GetButtonDown("Jump") && isClearedControlTutorial[3] == 1)
+        {
+            isClearedControlTutorial[3] = 2;
         }
     }
 
@@ -191,9 +235,18 @@ public class Player : MonoBehaviour
         playerHp -= (int)(atk  * (100 / (100 + playerGrd)));
     }
 
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.CompareTag("Quest"))
+        {
+            Destroy(col.gameObject);
+            OnQuestClear.Invoke();
+        }
+    }
+
     void OnTriggerStay(Collider col)
     {
-        if(col.CompareTag("Ingredient"))
+        if (col.CompareTag("Ingredient"))
         {
             txtIngredientName.text = col.name;
             ingredientUI.SetActive(true);

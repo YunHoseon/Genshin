@@ -6,25 +6,4 @@ public class PlayerAttack : MonoBehaviour
 {
     public GameObject weapon;
     public GameObject backWeapon;
-
-    void Start()
-    {
-        //StartCoroutine(test());
-    }
-
-    void OnTriggerEnter(Collider col)
-    {
-        if(col.CompareTag("Enemy"))
-        {
-
-        }
-    }
-
-    IEnumerator test()
-    {
-        yield return new WaitForSeconds(2f);
-        Debug.Log("one");
-        yield return new WaitForSeconds(2f);
-        Debug.Log("two");
-    }
 }

@@ -21,6 +21,11 @@ public class UIManager : MonoBehaviour
     public bool IsFullEnergy { get; set; }
     public float EnergyGauge { get; set; }
 
+    public int monsterCount = 0;
+    private float timer = 0;
+    private bool isClearQuest0 = false;
+    private bool isClearQuest1 = false;
+
     /* inventory */
 
     public GameObject menuUI;
@@ -38,6 +43,14 @@ public class UIManager : MonoBehaviour
     public GameObject MenuObjects;
 
     public GameObject CharacterUI;
+
+    /* Tutorial */
+    public GameObject[] TutorialUI = new GameObject[4];
+
+    /* Quest */
+    public Text txtTitle;
+    public Text txtContent;
+    public Text txtClear;
 
     void Start()
     {
@@ -72,6 +85,14 @@ public class UIManager : MonoBehaviour
         {
             InGameUI.SetActive(true);
         }
+        
+        SetActiveTutorialUI();
+
+        if(isClearQuest0 && !isClearQuest1)
+            txtContent.text = "몬스터를 모두 무찌르자 ("+ monsterCount +"/3)";
+
+        if (monsterCount >= 3 && !isClearQuest1)
+            MonsterQuestClear();
     }
 
     void GoToMenu()
@@ -224,5 +245,54 @@ public class UIManager : MonoBehaviour
             menuUI.SetActive(true);
         else
             menuUI.SetActive(false);
+    }
+
+    private void SetActiveTutorialUI()
+    {
+        if(GameManager.Instance.Player.isClearedControlTutorial[3] == 2)
+        {
+            TutorialUI[3].SetActive(false);
+            return;
+        }
+
+        for(int i = 0; i < TutorialUI.Length; i++)
+        {
+            if (GameManager.Instance.Player.isClearedControlTutorial[i] == 1)
+                TutorialUI[i].SetActive(true);
+            else
+                TutorialUI[i].SetActive(false);
+        }
+    }
+
+    public void OnQuestClear()
+    {
+        txtClear.gameObject.SetActive(true);
+        isClearQuest0 = true;
+
+        Invoke("ToNextQuest", 3.0f);
+    }
+
+    void ToNextQuest()
+    {
+        if(isClearQuest0 && !isClearQuest1)
+        {
+            txtTitle.text = "전투 배우기";
+            txtContent.text = "몬스터를 모두 무찌르자 (0/3)";
+            txtClear.gameObject.SetActive(false);
+        }
+        else
+        {
+            txtTitle.gameObject.SetActive(false);
+            txtContent.gameObject.SetActive(false);
+            txtClear.gameObject.SetActive(false);
+        }
+    }
+
+    public void MonsterQuestClear()
+    {
+        txtClear.gameObject.SetActive(true);
+        isClearQuest1 = true;
+
+        Invoke("ToNextQuest", 3.0f);
     }
 }

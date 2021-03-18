@@ -57,7 +57,10 @@ public class Monster : MonoBehaviour
     private bool isInMenu = false;
     private bool isAttacked = false;
     public Vector3 offset;      // for gustSurge
-    
+
+    [SerializeField]
+    private ParticleSystem damagedEffect;
+
     void Awake()
     {
         monsterHp = monsterMaxHp;
@@ -184,9 +187,12 @@ public class Monster : MonoBehaviour
 
     public void Die()
     {
-        GameManager.Instance.Player.PlayerExp += 50;
         if(this.gameObject != null)
+        {
+            GameManager.Instance.Player.PlayerExp += 50;
+            UIManager.Instance.monsterCount += 1;
             Destroy(this.gameObject, 0.3f);
+        }
     }
 
     public void ActiveCol()
@@ -221,11 +227,12 @@ public class Monster : MonoBehaviour
                     transform.position + new Vector3(Random.Range(-1.0f, 1.0f), 1, 0), Quaternion.identity);
                 damageText.transform.parent = ParentDamageText;
                 damageText.GetComponent<Text>().text = (GameManager.Instance.Player.PlayerAtk * (100 / (100 + monsterGrd))).ToString("N0");
+                damagedEffect.Play();
 
                 animator.SetTrigger("Damaged");
                 monsterState = MonsterState.Damaged;
                 monsterHp -= GameManager.Instance.Player.PlayerAtk * (100 / (100 + monsterGrd));
-                Damaged();                
+                Damaged();
             }
             else
             {
