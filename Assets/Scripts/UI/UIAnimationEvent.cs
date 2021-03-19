@@ -30,6 +30,7 @@ public class UIAnimationEvent : MonoBehaviour
     public void OffGameStart_()
     {
         GameStart_.SetActive(false);
+        ToGameScene();
     }
 
     public void PlayStartSound()

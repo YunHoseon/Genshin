@@ -20,6 +20,7 @@ public class FloatingDamage : MonoBehaviour
         txtDamage = GetComponent<Text>();
         alpha = txtDamage.color;
         scaleChange = new Vector3(2, 2, 2);
+        txtDamage.transform.localScale = scaleChange;
         Invoke("DestroyText", destroyTime);
     }
     
@@ -28,7 +29,6 @@ public class FloatingDamage : MonoBehaviour
         transform.Translate(new Vector3(0, moveSpeed * Time.deltaTime), 0);
         //alpha.a = Mathf.Lerp(alpha.a, 0.0f, alphaSpeed * Time.deltaTime);
         //txtDamage.color = alpha;
-        txtDamage.transform.localScale = scaleChange;
     }
 
     void DestroyText()

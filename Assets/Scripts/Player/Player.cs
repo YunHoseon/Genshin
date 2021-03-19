@@ -102,8 +102,6 @@ public class Player : MonoBehaviour
         isClearedControlTutorial[1] = 0;
         isClearedControlTutorial[2] = 0;
         isClearedControlTutorial[3] = 0;
-
-        //DamageText.transform.localScale = new Vector3(2, 2, 2);
     }
 
     void Update()
@@ -231,6 +229,8 @@ public class Player : MonoBehaviour
     {
         GameObject damageText = Instantiate(DamageText,
                     transform.position + new Vector3(Random.Range(-1.0f, 1.0f), 1, 0), Quaternion.identity);
+        damageText.transform.localScale = new Vector3(2, 2, 2);
+        Debug.Log(damageText.transform.localScale);
         damageText.transform.parent = ParentDamageText;
         damageText.GetComponent<Text>().text = ((int)(atk * (100 / (100 + playerGrd)))).ToString("N0");
 
