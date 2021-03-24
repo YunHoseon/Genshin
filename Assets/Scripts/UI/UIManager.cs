@@ -53,16 +53,17 @@ public class UIManager : MonoBehaviour
     public Text txtContent;
     public Text txtClear;
 
-    public AudioSource AttackAudio;
-    public AudioSource DamagedAudio;
-    public AudioSource OKAudio;
-    public AudioSource QuitAudio;
-    public AudioSource SwitchAudio;
-    public AudioSource CompleteAudio;
+    private SoundManager soundManager;
+
+    public GameObject settingUI;
+    public Slider BGMSlider;
+    public Slider FXSlider;
 
     void Start()
     {
-        for(int i = 0; i < inventoryUI.Length; i++)
+        soundManager = SoundManager.instance;
+
+        for (int i = 0; i < inventoryUI.Length; i++)
             inventoryUI[i].SetActive(false);
         for (int i = 0; i < selectInventoryUI.Length; i++)
             selectInventoryUI[i].SetActive(false);
@@ -152,21 +153,6 @@ public class UIManager : MonoBehaviour
         inventoryWholeUI.SetActive(GameManager.Instance.Player.isInInventory);
     }
 
-    public void GoToCharacter()
-    {
-        if (GameManager.Instance.Player.isInInventory)
-            return;
-
-        menuUI.SetActive(false);
-        GameManager.Instance.Player.isInCharacter = GameManager.Instance.Player.isInCharacter ? false : true;
-        CharacterUI.SetActive(GameManager.Instance.Player.isInCharacter);
-
-        Map.SetActive(false);
-        GameObjects.SetActive(false);
-        InGameUI.SetActive(false);
-        MenuObjects.SetActive(false);
-    }
-
     public void ClickWeaponInventory()
     {
         inventoryNum = 0;
@@ -227,6 +213,44 @@ public class UIManager : MonoBehaviour
         txtItemKind.text = "육성 아이템";
     }
 
+    public void GoToCharacter()
+    {
+        if (GameManager.Instance.Player.isInInventory)
+            return;
+
+        menuUI.SetActive(false);
+        GameManager.Instance.Player.isInCharacter = GameManager.Instance.Player.isInCharacter ? false : true;
+        CharacterUI.SetActive(GameManager.Instance.Player.isInCharacter);
+
+        Map.SetActive(false);
+        GameObjects.SetActive(false);
+        InGameUI.SetActive(false);
+        MenuObjects.SetActive(false);
+    }
+
+    public void GoToSetting()
+    {
+        settingUI.SetActive(true);
+        menuUI.SetActive(false);
+    }
+
+   public void ChangeValueSlider()
+    {
+        SoundManager.instance.GameBGM.volume = BGMSlider.value;
+
+        SoundManager.instance.AttackAudio.volume = FXSlider.value;
+        SoundManager.instance.DamagedAudio.volume = FXSlider.value;
+        SoundManager.instance.OKAudio.volume = FXSlider.value;
+        SoundManager.instance.QuitAudio.volume = FXSlider.value;
+        SoundManager.instance.SwitchAudio.volume = FXSlider.value;
+    }
+
+    public void QuitMenu()
+    {
+        GameManager.Instance.Player.isInMenu = false;
+        menuUI.SetActive(false);
+    }
+
     public void QuitInventory()
     {
         GameManager.Instance.Player.isInInventory = false;
@@ -248,6 +272,12 @@ public class UIManager : MonoBehaviour
             menuUI.SetActive(true);
         else
             menuUI.SetActive(false);
+    }
+
+    public void QuitSetting()
+    {
+        settingUI.SetActive(false);
+        menuUI.SetActive(true);
     }
 
     private void SetActiveTutorialUI()
@@ -302,36 +332,6 @@ public class UIManager : MonoBehaviour
     public void ToLoadingScene()
     {
         SceneManager.LoadScene(0);
-    }
-
-    public void PlayQuitSound()
-    {
-        QuitAudio.Play();
-    }
-
-    public void PlayAttackSound()
-    {
-        AttackAudio.Play();
-    }
-
-    public void PlayDamagedSound()
-    {
-        DamagedAudio.Play();
-    }
-
-    public void PlayOKSound()
-    {
-        OKAudio.Play();
-    }
-
-    public void PlaySwitchSound()
-    {
-        SwitchAudio.Play();
-    }
-
-    public void PlayCompleteSound()
-    {
-        CompleteAudio.Play();
     }
 
     public void ExitGame()

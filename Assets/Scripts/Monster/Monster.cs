@@ -32,6 +32,9 @@ public class Monster : MonoBehaviour
 
     private Vector3 originPos;
 
+    public GameObject SkinnedMesh;
+    public Material DissolveMat;
+
     private float moveSpeed = 1.0f;
     private float findDistance = 10.0f;
     private float attackDistance = 3.0f;
@@ -192,7 +195,10 @@ public class Monster : MonoBehaviour
         {
             GameManager.Instance.Player.PlayerExp += 50;
             UIManager.Instance.monsterCount += 1;
-            Destroy(this.gameObject, 0.3f);
+            animator.SetBool("Die", true);
+            SkinnedMesh.GetComponent<SkinnedMeshRenderer>().material = DissolveMat;
+
+            Destroy(this.gameObject, 2f);
         }
     }
 
@@ -229,7 +235,7 @@ public class Monster : MonoBehaviour
                 damageText.transform.parent = ParentDamageText;
                 damageText.GetComponent<Text>().text = (GameManager.Instance.Player.PlayerAtk * (100 / (100 + monsterGrd))).ToString("N0");
                 damagedEffect.Play();
-                UIManager.Instance.PlayDamagedSound();
+                SoundManager.instance.PlayDamagedSound();
 
                 animator.SetTrigger("Damaged");
                 monsterState = MonsterState.Damaged;
