@@ -17,7 +17,7 @@ public class ItemInfoBoard : MonoBehaviour
         InitBoard();
     }
 
-    void InitBoard()
+    public void InitBoard()
     {
         if(item == null)
         {
@@ -60,5 +60,12 @@ public class ItemInfoBoard : MonoBehaviour
         txtItemName.gameObject.SetActive(true);
         imgItem.gameObject.SetActive(true);
         txtItemInfo.gameObject.SetActive(true);
+    }
+
+    public void ClearInfo()
+    {
+        txtItemName.gameObject.SetActive(false);
+        imgItem.gameObject.SetActive(false);
+        txtItemInfo.gameObject.SetActive(false);
     }
 }

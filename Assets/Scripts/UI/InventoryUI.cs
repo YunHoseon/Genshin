@@ -8,9 +8,12 @@ public class InventoryUI : MonoBehaviour
     public Slot[] slots;
     public Transform slotHolder;
 
+    public Button btnUse;
+
     void Awake()
     {
         slots = slotHolder.GetComponentsInChildren<Slot>();
+        btnUse.enabled = false;
     }
 
     public void AcquireItem(Item _item, int _count)
@@ -39,5 +42,15 @@ public class InventoryUI : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ClickSlot()
+    {
+        btnUse.enabled = true;
+    }
+
+    public void ClickUseBtn()
+    {
+        slots[0].UseItem(slots[0].item,1);
     }
 }

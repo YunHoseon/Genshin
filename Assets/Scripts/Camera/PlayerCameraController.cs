@@ -57,11 +57,11 @@ public class PlayerCameraController : MonoBehaviour
             if (currDistance < 2)
                 currDistance = 2;
 
-            var targetPos = Holder.position + new Vector3(0, (distanceHit - 2) / 3f + cameraPos[1], 0);
+            var targetPos = Holder.position + new Vector3(0, (distanceHit - 5) / 3f + cameraPos[1], 0);
 
             currDistance -= Input.GetAxis("Mouse ScrollWheel") * 2;
-            if (currDistance > 6.0f)
-                currDistance = 6.0f;
+            if (currDistance > 5.5f)
+                currDistance = 5.5f;
             if (currDistance < 3.5f)
                 currDistance = 3.5f;
 

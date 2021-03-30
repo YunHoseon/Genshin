@@ -38,13 +38,31 @@ public class Slot : MonoBehaviour
         txtCount.text = itemCount.ToString("N0");
     }
 
+    public void UseItem(Item _item, int _count = 1)
+    {
+        switch(_item.ItemID)
+        {
+            case 1:
+                GameManager.Instance.Player.playerHp += 300;
+                if(GameManager.Instance.Player.playerHp > GameManager.Instance.Player.playerMaxHp)
+                    GameManager.Instance.Player.playerHp = GameManager.Instance.Player.playerMaxHp;
+                break;
+        }
+
+        itemCount -= _count;
+        txtCount.text = itemCount.ToString("N0");
+
+        if(itemCount <= 0)
+            itemInfoBoard.ClearInfo();
+    }
+
     public void SetSlot(int _count)
     {
         itemCount += _count;
         txtCount.text = itemCount.ToString("N0");
 
         if (itemCount <= 0)
-            ClearSlot();
+            ClearSlot();   
     }
 
     public void UpdateSlotUI()

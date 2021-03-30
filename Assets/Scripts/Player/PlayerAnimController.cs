@@ -17,6 +17,9 @@ public class PlayerAnimController : MonoBehaviour
     [SerializeField]
     private ParticleSystem slash;
 
+    [SerializeField]
+    private Sword sword;
+
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -130,8 +133,15 @@ public class PlayerAnimController : MonoBehaviour
         //rigidbody.MovePosition(transform.position + transform.forward * 0.8f);
     }
 
+    public void ActiveCollider()
+    {
+        sword.GetComponent<SphereCollider>().enabled = true;
+    }
+
     public void ExitSlash1()
     {
+        sword.GetComponent<SphereCollider>().enabled = false;
+        sword.ExitSlash();
         isAttacking = false;
         player.playerState = PlayerState.None;
     }

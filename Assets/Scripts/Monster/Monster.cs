@@ -64,6 +64,9 @@ public class Monster : MonoBehaviour
     [SerializeField]
     private ParticleSystem damagedEffect;
 
+    [SerializeField]
+    private float objectHeight = 5.0f;
+
     void Awake()
     {
         monsterHp = monsterMaxHp;
@@ -103,9 +106,21 @@ public class Monster : MonoBehaviour
                 Return();
                 break;
             case MonsterState.Die:
+                DissolveEffect();
                 break;
         }
         //Debug.Log("dist : " + (int)Vector3.Distance(player.transform.position, transform.position));
+    }
+
+    void DissolveEffect()
+    {
+        objectHeight -= Time.deltaTime;
+        SetHeight(objectHeight);
+    }
+
+    private void SetHeight(float height)
+    {
+        SkinnedMesh.GetComponent<SkinnedMeshRenderer>().material.SetFloat("_CutoffHeight", height);
     }
 
     IEnumerator CheckDist()
@@ -195,7 +210,6 @@ public class Monster : MonoBehaviour
         {
             GameManager.Instance.Player.PlayerExp += 50;
             UIManager.Instance.monsterCount += 1;
-            animator.SetBool("Die", true);
             SkinnedMesh.GetComponent<SkinnedMeshRenderer>().material = DissolveMat;
 
             Destroy(this.gameObject, 2f);
@@ -224,29 +238,35 @@ public class Monster : MonoBehaviour
             fillArea.SetActive(true);
     }
 
+    public void DamagedFromSword()
+    {
+        if (monsterHp > 0)
+        {
+            GameObject damageText = Instantiate(DamageText,
+                transform.position + new Vector3(Random.Range(-1.0f, 1.0f), 1, 0), Quaternion.identity);
+            damageText.transform.parent = ParentDamageText;
+            damageText.GetComponent<Text>().text = (GameManager.Instance.Player.PlayerAtk * (100 / (100 + monsterGrd))).ToString("N0");
+            damagedEffect.Play();
+            SoundManager.instance.PlayDamagedSound();
+
+            animator.SetTrigger("Damaged");
+            monsterState = MonsterState.Damaged;
+            monsterHp -= GameManager.Instance.Player.PlayerAtk * (100 / (100 + monsterGrd));
+            Damaged();
+        }
+        else if (monsterState != MonsterState.Die)
+        {
+            monsterState = MonsterState.Die;
+            animator.SetTrigger("Die");
+            Die();
+        }
+    }
+
     void OnTriggerEnter(Collider col)
     {
         if (col.CompareTag("Weapon"))
         {
-            if (monsterHp > 0)
-            {
-                GameObject damageText = Instantiate(DamageText,
-                    transform.position + new Vector3(Random.Range(-1.0f, 1.0f), 1, 0), Quaternion.identity);
-                damageText.transform.parent = ParentDamageText;
-                damageText.GetComponent<Text>().text = (GameManager.Instance.Player.PlayerAtk * (100 / (100 + monsterGrd))).ToString("N0");
-                damagedEffect.Play();
-                SoundManager.instance.PlayDamagedSound();
-
-                animator.SetTrigger("Damaged");
-                monsterState = MonsterState.Damaged;
-                monsterHp -= GameManager.Instance.Player.PlayerAtk * (100 / (100 + monsterGrd));
-                Damaged();
-            }
-            else
-            {
-                monsterState = MonsterState.Die;
-                Die();
-            }
+           
         }
     }
 
